@@ -1,0 +1,49 @@
+$active: #534dff;
+// 自定义导航
+.status_app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  background: $active;
+  /* #ifdef APP-PLUS */
+  height: var(--status-bar-height);
+  /* #endif */
+}
+
+
+//蓝色阴影
+ .blue_shadow{
+    box-shadow:0px 6px 16px -6px $active
+ }
+
+.flex {
+  display: flex;
+}
+//
+.tab_active {
+  color: $active !important ;
+}
+.tab_active::before {
+  content: '';
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  background: $active;
+}
+//
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 99;
+}
+.mask_content {
+  transform: translateY(0) !important;
+}

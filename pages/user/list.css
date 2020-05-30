@@ -1,0 +1,32 @@
+
+.content {
+		/* padding: 0 30upx; */
+		background: #fff;
+	}
+.list {
+	background: #fff;
+	padding: 40upx 30upx;
+	border-bottom: 1px solid #F5F5F5;
+	margin-bottom: 20upx;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 28upx;
+}
+.list text {
+	color: #999999;
+}
+.list .pic {
+	width: 72upx;
+	height: 72upx;
+	border-radius: 50%;
+	vertical-align: middle;
+}
+.list .rt {
+	width: 10upx;
+	height: 16upx;
+	margin-left: 20upx;
+}
+.bdline {
+	border-bottom: 20upx solid #f5f5f5;
+}

@@ -1,0 +1,438 @@
+{
+  "pages": [{
+      "path": "pages/basic/index",
+      "style": {
+        "navigationBarTitleText": "行情",
+        "titleImage": "./static/images/title_img.png",
+        "navigationBarTextStyle": "black",
+        "app-plus": {
+          "titleNView": {
+            "buttons": [{
+              "fontSrc": "/static/iconfont/iconfont.ttf",
+              "fontSize": "16px",
+              "text": "\ue63a",
+              "width": "25px"
+            }],
+            "backgroundColor": "#fff"
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/my_select/index",
+      "style": {
+        "navigationBarTitleText": "自选区",
+        "navigationBarTextStyle": "black",
+        "app-plus": {
+          "titleNView": {
+            "buttons": [{
+              "fontSrc": "/static/iconfont/iconfont.ttf",
+              "fontSize": "16px",
+              "text": "\ue687"
+            }],
+            "backgroundColor": "#fff"
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/login_register/login",
+      "style": {
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/login_register/register",
+      "style": {
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/login_register/forgetpassword",
+      "style": {
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/login_register/forgetpasswordEmail",
+      "style": {
+        "app-plus": {
+          "titleNView": false
+        }
+      }
+    },
+    {
+      "path": "pages/basic/exchange/index",
+      "style": {
+        "navigationBarTitleText": "股票详情",
+        "app-plus": {
+          "titleNView": {
+            "buttons": [{
+              "fontSrc": "/static/iconfont/iconfont.ttf",
+              "fontSize": "16px",
+              "text": "\ue687"
+            }],
+            "backgroundColor": "#fff"
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/basic/exchange/chartDetail",
+      "style": {
+        "navigationBarTitleText": "详情图表"
+      }
+    },
+    {
+      "path": "pages/wallet/index",
+      "style": {
+        "navigationBarTitleText": "钱包",
+        "app-plus": {
+          // "bounce": "none",
+          "titleNView": {
+            "buttons": [ //原生标题栏按钮配置,
+              {
+                "text": "提现",
+                "fontSize": "14px"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/user/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "app-plus": {
+          "titleNView": {
+            "buttons": [ //原生标题栏按钮配置,
+              {
+                "fontSrc": "/static/iconfont/iconfont.ttf",
+                "text": "\ue682",
+                "type": "none",
+                "fontSize": "16px",
+                "width": "30px"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/wallet/addAssets",
+      "style": {
+        "navigationBarTitleText": "添加资产"
+      }
+    },
+    {
+      "path": "pages/wallet/payCode",
+      "style": {
+        "navigationBarTitleText": "充值",
+        "app-plus": {
+          "bounce": "none",
+          "titleNView": {
+            "buttons": [ //原生标题栏按钮配置,
+              {
+                "text": "账单 ",
+                "fontSize": "12px"
+              }
+            ]
+          }
+        }
+
+      }
+    },
+    {
+      "path": "pages/wallet/getMoney",
+      "style": {
+        "navigationBarTitleText": "提现",
+        "app-plus": {
+          "bounce": "none",
+          "titleNView": {
+            "buttons": [ //原生标题栏按钮配置,
+              {
+                "text": "账单 ",
+                "fontSize": "12px"
+              }
+            ]
+          }
+        }
+
+      }
+    },
+    {
+      "path": "pages/wallet/listAddress",
+      "style": {
+        "navigationBarTitleText": "提现地址管理",
+        "app-plus": {
+          "bounce": "none",
+          "titleNView": {
+            "buttons": [ //原生标题栏按钮配置,
+              {
+                "text": "新增 ",
+                "fontSize": "12px"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "path": "pages/wallet/addAddress",
+      "style": {
+        "navigationBarTitleText": "提现地址管理"
+      }
+    },
+    {
+      "path": "pages/wallet/bill",
+      "style": {
+        "navigationBarTitleText": "账单记录"
+      }
+    },
+    {
+      "path": "pages/user/myInfo",
+      "style": {
+        "navigationBarTitleText": "我的信息"
+      }
+    },
+    {
+      "path": "pages/user/real",
+      "style": {
+        "navigationBarTitleText": "实名认证"
+      }
+    },
+    {
+      "path": "pages/user/setInfo",
+      "style": {
+        "navigationBarTitleText": "设置"
+      }
+    },
+    {
+      "path": "pages/user/safe",
+      "style": {
+        "navigationBarTitleText": "安全中心"
+      }
+    },
+    {
+      "path": "pages/user/upPic",
+      "style": {
+        "navigationBarTitleText": "实名认证"
+      }
+    },
+    {
+      "path": "pages/notice/index",
+      "style": {
+        "navigationBarTitleText": "公告中心",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/notice/details",
+      "style": {
+        "navigationBarTitleText": "详情"
+      }
+    },
+    {
+      "path": "pages/user/changePwd"
+    },
+    {
+      "path": "pages/user/google",
+      "style": {
+        "navigationBarTitleText": "绑定谷歌验证"
+      }
+    },
+    {
+      "path": "pages/user/invitation",
+      "style": {
+        "navigationBarTitleText": "我的邀请"
+      }
+    },
+    {
+      "path": "pages/user/entrust",
+      "style": {
+        "navigationBarTitleText": "我的委托"
+      }
+    },
+    {
+      "path": "pages/basic/exchange/selectCoin",
+      "style": {
+        "navigationBarTitleText": "市场选择",
+        "app-plus": {
+          "titleNView": {
+            "backgroundColor": "#fff"
+          }
+        }
+      }
+    }, {
+      "path": "pages/basic/noticeDetail",
+      "style": {}
+    },
+    {
+      "path": "pages/user/next",
+      "style": {
+        "navigationBarTitleText": "修改绑定手机"
+      }
+    }, {
+      "path": "pages/basic/search",
+      "style": {
+        "navigationBarTitleText": "搜索"
+      }
+    }, {
+      "path": "pages/basic/recruit",
+      "style": {
+        "navigationBarTitleText": "招募合伙人",
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user/myApplication",
+      "style": {
+        "navigationBarTitleText": "我的申请"
+      }
+    },
+    {
+      "path": "pages/login_register/agreement",
+      "style": {
+        "navigationBarTitleText": "注册用户协议"
+      }
+    }, {
+      "path": "pages/wallet/withdrawMoney",
+      "style": {
+        "navigationBarTitleText": "提现"
+      }
+    }, {
+      "path": "pages/user/cardList",
+      "style": {
+        "navigationBarTitleText": "银行卡管理"
+      }
+    }, {
+      "path": "pages/wallet/addBank",
+      "style": {
+        "navigationBarTitleText": "银行卡详情"
+      }
+    }, {
+      "path": "pages/basic/exchange/sellBuy",
+      "style": {
+        "navigationBarTitleText": "交易"
+      }
+    }, {
+      "path": "pages/contract/index",
+      "style": {
+        "navigationBarTitleText": "合约"
+      }
+
+    }, {
+      "path": "pages/contract/simple",
+      "style": {
+        "navigationBarTitleText": "期权简选"
+      }
+    }, {
+      "path": "pages/contract/simpleList",
+      "style": {
+        "navigationBarTitleText": "期权简选"
+      }
+    }, {
+      "path": "pages/contract/contractList",
+      "style": {
+        "navigationBarTitleText": "期权简选"
+      }
+    }, {
+      "path": "pages/contract/simpleContent",
+      "style": {
+        "navigationBarTitleText": "期权简选"
+      }
+    }, {
+      "path": "pages/contract/entrustContent",
+      "style": {
+        "navigationBarTitleText": "委托详情"
+      }
+    }, {
+      "path": "pages/contract/moneyMove",
+      "style": {
+        "navigationBarTitleText": "资金划转"
+      }
+    }, {
+      "path": "pages/contract/sellPotence",
+      "style": {
+        "navigationBarTitleText": "期权卖方权限"
+      }
+    }, {
+      "path": "pages/otc/index",
+      "style": {
+        "navigationBarTitleText": "otc",
+        "navigationStyle": "custom"
+      }
+    }, {
+      "path": "pages/otc/order",
+      "style": {
+        "navigationBarTitleText": "otc订单"
+      }
+    }, {
+      "path": "pages/otc/issue",
+      "style": {
+        "navigationBarTitleText": "发布委托单"
+      }
+    }, {
+      "path": "pages/otc/orderContent",
+      "style": {
+        "navigationBarTitleText": "订单详情",
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Super Culture",
+    "navigationBarBackgroundColor": "#fff"
+  },
+  "tabBar": {
+    "color": "#333333",
+    "backgroundColor": "#fff",
+    "selectedColor": "#534DFF",
+    "iconWidth": "24px",
+    "list": [{
+        "pagePath": "pages/basic/index",
+        "text": "行情",
+        "iconPath": "static/images/tabbar/tabbar_1-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_1-2.png"
+      },
+      {
+        "pagePath": "pages/my_select/index",
+        "text": "自选区",
+        "iconPath": "static/images/tabbar/tabbar_2-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_2-2.png"
+      },
+      {
+        "pagePath": "pages/otc/index",
+        "text": "otc",
+        "iconPath": "static/images/tabbar/tabbar_3-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_3-2.png"
+      },
+      {
+        "pagePath": "pages/wallet/index",
+        "text": "钱包",
+        "iconPath": "static/images/tabbar/tabbar_3-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_3-2.png"
+      },
+      {
+        "pagePath": "pages/contract/index",
+        "text": "合约",
+        "iconPath": "static/images/tabbar/contract.png",
+        "selectedIconPath": "static/images/tabbar/contract_act.png"
+      }
+    ]
+  }
+}
+// {
+//        "pagePath": "pages/user/index",
+//        "text": "我的",
+//        "iconPath": "static/images/tabbar/tabbar_4-1.png",
+//        "selectedIconPath": "static/images/tabbar/tabbar_4-2.png"
+//      }
