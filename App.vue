@@ -42,6 +42,7 @@ export default {
 
 <style>
 @import './common/qiun.css';
+@import url('static/iconfont/iconfont.css');
 
 body {
   height: 100%;

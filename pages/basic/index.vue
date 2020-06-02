@@ -102,8 +102,7 @@ export default {
   },
   // 监听右上角按钮
   onNavigationBarButtonTap() {
-    console.log('点击了的~~~~')
-    // this.jump('/pages/wallet/withdrawMoney', { coidId: this.total.coidId, qty: this.total.scBanlance || '0' });
+    uni.navigateTo({url:"/pages/user/index"})
   },
   data() {
     return {

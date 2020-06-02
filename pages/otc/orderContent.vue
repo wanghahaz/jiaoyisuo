@@ -36,7 +36,7 @@
     <view class="deal_centent buy_deal" v-if="type == 1 && status == 2">
       <view class="flex">
         <view>
-          <text class="iconfont iconzfb icons"></text>
+          <text class="iconfont iconumidd17 icons"></text>
           <text>支付宝</text>
         </view>
         <view>
@@ -48,9 +48,10 @@
         <text>收款姓名</text>
         <text>张三</text>
       </view>
-      <view>
+      <view class="icon_copy">
         <text>收款卡号</text>
         <text>3256 8564 2458 6412</text>
+        <text @click="copy('3256 8564 2458 6412')" class="iconfont iconfuzhi"></text>
       </view>
       <view>
         <text>银行信息</text>
@@ -82,9 +83,10 @@
         <text>交易时间</text>
         <text>2020-05-14 12:00:00</text>
       </view>
-      <view>
+      <view class="icon_copy">
         <text>订单编号</text>
-        <text>￥200</text>
+        <text>154654651564</text>
+        <text @click="copy('123415456')" class="iconfont iconfuzhi"></text>
       </view>
       <view v-if="status == 1 || type == 0" class="deal_tip">
         若要购买其他数字货币，请将
@@ -133,8 +135,11 @@
     </view>
 
     <view v-if="status == 1" @click="toRouter('', {})" class="toMoney">划转资产</view>
-    <view v-if="status == 2 && type == 0" class="sell_sub subs"><text>确认收款</text></view>
-    <view v-if="status == 2 && type == 1" class="buy_sub subs blue"><text>已付款,请放币</text></view>
+    <view v-if="status == 2 && type == 0" class="sell_sub subs"><text @click="sell_subs" class="blue">确认收款</text></view>
+    <view v-if="status == 2 && type == 1" class="buy_sub subs">
+      <text @click="buy_subs(0)">取消订单</text>
+      <text @click="buy_subs(1)" class="blue">已付款,请放币</text>
+    </view>
   </view>
 </template>
 
@@ -157,6 +162,15 @@ export default {
   },
   onShow() {},
   methods: {
+    copy(e) {
+      console.log(e)
+      uni.setClipboardData({
+        data: e,
+        success: function() {
+          console.log('success');
+        }
+      });
+    },
     back_() {
       uni.navigateBack({
         delta: 1
@@ -165,6 +179,18 @@ export default {
     toRouter(url, data) {
       uni.navigateTo({
         url: url + fn.params(data)
+      });
+    },
+    buy_subs(type) {
+      let obj = {};
+      type == 0 ? (obj = { title: '取消订单', text: '您确认取消订单么？' }) : (obj = { title: '确认付款' });
+      model(obj).then(res => {
+        console.log(res);
+      });
+    },
+    sell_subs() {
+      model({ title: '确认收款', text: '', stext: '确认收款' }).then(res => {
+        console.log(res);
       });
     }
   },
@@ -209,6 +235,15 @@ export default {
       .darger {
         color: #fa3354;
       }
+    }
+  }
+  .icon_copy {
+    padding-right: 40upx;
+    position: relative;
+    .iconfuzhi {
+      position: absolute;
+      right: 0;
+      top: 3px;
     }
   }
   .deal_centent {
@@ -341,13 +376,21 @@ export default {
       line-height: 90upx;
       text-align: center;
       width: 100%;
-      background: #e9e9e9;
+      background: #fff;
+    }
+    .blue {
+      background: $active;
+      @extend .blue_shadow;
     }
   }
-  .blue {
+  .buy_sub {
+    justify-content: space-between;
+    text:nth-of-type(1) {
+      color: #333;
+      border: 1px solid #f0f0f2;
+    }
     text {
-      background: $active;
-      @extend  .blue_shadow;
+      width: 45%;
     }
   }
 }

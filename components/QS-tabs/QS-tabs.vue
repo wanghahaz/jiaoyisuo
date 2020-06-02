@@ -1,16 +1,16 @@
 <template>
-	<view class="QS-tabs" :style="{
+	<view class="QS-tabs box_zing" :style="{
 	'z-index': zIndex,
 	'font-size': fontSize + 'rpx',
 	'background-color': getBgColor,
 	'transition-duration': getDuration + 's'
 	}">
-		<scroll-view id="QS-tabs-scroll" scroll-x class="QS-tabs-scroll" :scroll-left="left" scroll-with-animation :style="{ 
+		<scroll-view id="QS-tabs-scroll" scroll-x class="QS-tabs-scroll box_zing" :scroll-left="left" scroll-with-animation :style="{ 
 			'z-index': (Number(zIndex) + 1)
 		}">
-			<view class="QS-tabs-scroll-box">
+			<view class="QS-tabs-scroll-box box_zing">
 				<!-- 循环tabs -->
-				<view class="QS-tabs-scroll-item" :style="{
+				<view class="QS-tabs-scroll-item " :style="{
 					'height': getHeight + 'rpx', 
 					'line-height': getHeight + 'rpx',
 					'min-width': getWidth + 'rpx',
@@ -22,11 +22,11 @@
 				}"
 				 v-for="(item, index) in getTabs" :key="index" @tap="emit(index)" :id="preId + index">
 					<!-- line1 -->
-					<view v-if="animationMode==='line1'" class="boxStyle" :style="getDurationStyle + (index===getCurrent?getActiveStyle:getDefaultStyle)"></view>
+					<view v-if="animationMode==='line1'" class="boxStyle box_zing" :style="getDurationStyle + (index===getCurrent?getActiveStyle:getDefaultStyle)"></view>
 					{{item.name || item}}
 				</view>
 				<!-- itemBackground -->
-				<view v-if="hasItemBackground" class="itemBackgroundBox" :style="{
+				<view v-if="hasItemBackground" class="itemBackgroundBox box_zing" :style="{
 					'height': getHeight + 'rpx',
 					'width': (isLine3?tabsInfo[getFinishCurrent]?tabsInfo[getFinishCurrent].width:0:tabsInfo[getCurrent]?tabsInfo[getCurrent].width:0) + 'px',
 					'z-index': Number(zIndex) + 1,
@@ -39,20 +39,20 @@
 					tabsInfo[getCurrent].left
 					:0)) + 'px'
 				}">
-					<view class="itemBackground" :style="'transition-duration:' + getDuration + 's;' + 
+					<view class="itemBackground box_zing" :style="'transition-duration:' + getDuration + 's;' + 
 						'background-color:' + getItemBackgroundColor + ';' + 
 						'box-shadow: 0 0 5rpx 5rpx ' + getItemBackgroundColor + ';' + 
 						itemBackgroundStyle + ';'" />
 				</view>
 				<!-- line2 -->
-				<view v-if="animationMode==='line2'" class="boxStyle2" :style="getLinezIndex + getDurationStyle + 
+				<view v-if="animationMode==='line2'" class="boxStyle2 box_zing" :style="getLinezIndex + getDurationStyle + 
 				'bottom:' + lineBottom + ';' + 
 				'width:' + lW + 'px;' + 
 				'background-color:' + (lineColor||getActiveColor) + ';' + 
 				line2Style + ';' + 
 				'left:' + line2Dx + 'px;'" />
 
-				<view v-if="animationMode==='line3'" class="boxStyle2" :style="getLinezIndex + 
+				<view v-if="animationMode==='line3'" class="boxStyle2 box_zing" :style="getLinezIndex + 
 				'bottom:' + lineBottom + ';' + 
 				'width:' + lW + 'px;' + 
 				'background-color:' + (lineColor||getActiveColor) + ';' + 
@@ -466,8 +466,7 @@
 </script>
 
 <style scoped>
-	view,
-	scroll-view {
+	.box_zing{
 		box-sizing: border-box;
 	}
 

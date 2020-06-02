@@ -46,14 +46,14 @@
         <text class="deal_text" @click="tab(1)" :class="tabIndex == 1 ? 'tabActive' : ''">当前委托</text>
         <text class="deal_text" @click="tab(2)" :class="tabIndex == 2 ? 'tabActive' : ''">当前成交</text>
       </view>
-      <scroll-view class="scrollView" :scroll-y="'true'" @scrolltolower="scroll">
+      <scroll-view class="scrollView" :scroll-y="'true'" >
         <template v-if="tabIndex == 1">
           <view @click="toRouter('/pages/contract/entrustContent', { id: item.id })" v-for="item in principalList" :key="item.id" class="list">
             <view class="box_content">
               <view class="left_content">
                 <text>{{ item.contractName }}</text>
-                <image v-if="item.type == 1" class="img_" src="../../static/images/wallet/buy.png"></image>
-                <image v-else class="img_" src="../../static/images/wallet/sell.png"></image>
+                <image v-if="item.type == 1" class="img_" src="../../../static/images/wallet/buy.png"></image>
+                <image v-else class="img_" src="../../../static/images/wallet/sell.png"></image>
               </view>
               <text @click.stop="back_(true, 5, item.id)" class="text_ cancel">撤单</text>
             </view>
@@ -73,7 +73,7 @@
             <view class="box_content">
               <view class="left_content">
                 <text class="contractName">{{ item.contractName }}</text>
-                <image class="img_" src="../../static/images/wallet/buy.png" mode=""></image>
+                <image class="img_" src="../../../static/images/wallet/buy.png" mode=""></image>
               </view>
             </view>
             <text class="time">{{ item.createTime }}</text>
@@ -188,7 +188,7 @@ export default {
     this.initSocket();
     this.getPrincipalList(this.socketId);
   },
-  methods: {
+  methods: {   
     initSocket() {
       let userinfo = uni.getStorageSync('userinfo');
       uni.connectSocket({
@@ -277,6 +277,7 @@ export default {
         }
       });
     },
+    
     // 买卖按钮加判断
     sub(type) {
       if (isNaN(this.data.price) || isNaN(this.data.qty) || this.data.price == '' || this.data.qty == '') {

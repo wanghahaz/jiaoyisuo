@@ -5,14 +5,14 @@
       <text>SC</text>
     </view>
     <view class="move">
-      <view>
+      <view @click="toRouter('/pages/contract/editPay',{type:1})">
         <text>SC</text>
-        <text>币币账户</text>
+        <text>{{leftName}}</text>
       </view>
       <image src="../../static/images/contract/mo_tab.png" mode=""></image>
-      <view>
+      <view @click="toRouter('/pages/contract/editPay',{type:2})">
         <text>SC</text>
-        <text>期权合约账户</text>
+        <text>{{rightName}}</text>
       </view>
     </view>
     <!-- from -->
@@ -36,11 +36,13 @@ export default {
   name: 'moneyMove',
   data() {
     return {
-      back:1,
+      back: 1,
       money: 1314.25,
+      leftName:'币币账户',
+      rightName:'期权合约账户',
       from: {
-        contractType:1,
-        transactionPassword:'',
+        contractType: 1,
+        transactionPassword: '',
         money: ''
       }
     };
@@ -52,39 +54,39 @@ export default {
     }
   },
   onLoad(e) {
-    if(e.type){
-      this.back=1
-    }else{
-      this.back=2
+    if (e.type) {
+      this.back = 1;
+    } else {
+      this.back = 2;
     }
   },
   onShow() {
-      this.getMoney()
+    this.getMoney();
   },
   methods: {
-    getMoney(){
-      myAxios.getPower().then( res =>{
-        this.money =res.data.scBalances
-      })
+    getMoney() {
+      myAxios.getPower().then(res => {
+        this.money = res.data.scBalances;
+      });
     },
-    all(){
-      this.from.money=this.money;
+    all() {
+      this.from.money = this.money;
     },
-    btn(){
-      if(!this.btnActive) return;
-      if(this.money<= this.from.money){
+    btn() {
+      if (!this.btnActive) return;
+      if (this.money <= this.from.money) {
         return;
       }
-      console.log(this.from)
-      myAxios.moenyMove(this.from).then(res=>{
-          console.log(res)
-          if(res.code==1){
-            this.goBack(this.back)
-          }else{
-            toast({text:'资金划转失败'})
-          }
-      })  
-      // 
+      console.log(this.from);
+      myAxios.moenyMove(this.from).then(res => {
+        console.log(res);
+        if (res.code == 1) {
+          this.goBack(this.back);
+        } else {
+          toast({ text: '资金划转失败' });
+        }
+      });
+      //
     },
     toRouter(url, data) {
       uni.navigateTo({
@@ -93,8 +95,8 @@ export default {
     },
     goBack(level) {
       uni.navigateBack({
-        delta:level
-      })
+        delta: level
+      });
     }
   }
 };
@@ -121,10 +123,10 @@ export default {
     border-radius: 6upx;
     background: #f3f3f3;
   }
-  .btn_Active{
+  .btn_Active {
     color: #fff;
-    background: #534DFF;
-    box-shadow: 0px 8px 10px -8px #534DFF;
+    background: #534dff;
+    box-shadow: 0px 8px 10px -8px #534dff;
   }
   .from_tip {
     font-size: 24upx;

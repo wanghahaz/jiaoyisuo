@@ -6,6 +6,12 @@
 import Vue from 'vue';
 import uCharts from '@/components/u-charts/u-charts';
 import { toast, loading, fn } from '@/common/common.js';
+let date_ = function() {
+  let y = new Date().getFullYear();
+  let m = new Date().getMonth() + 1 > 9 ? new Date().getMonth() + 1 : '0' + (new Date().getMonth() + 1);
+  let d = new Date().getDate() > 9 ? new Date().getDate() : '0' + new Date().getDate();
+  return `${y}-${m}-${d}`;
+};
 export default {
   props: ['chartData'],
   data() {
@@ -17,7 +23,8 @@ export default {
       pixelRatio: 1,
       klineList: [],
       marketInfo: null,
-      data: {}
+      data: {},
+      date: date_()
     };
   },
   watch: {
@@ -25,7 +32,10 @@ export default {
       handler(data, oldData) {
         setTimeout(() => {
           // this.$nextTick(() => {
-          this.klineList = data.klineList;
+         let klines=  data.klineList.filter(item => {
+           return  item.createTime2.slice(0, 10) == this.date;
+          });
+          this.klineList = klines;
           this.initChartData(this.klineList);
           this.marketInfo = data.marketInfo;
           if (this.chart) {
@@ -42,6 +52,7 @@ export default {
   },
   methods: {
     drawChart(canvasId) {
+      console.log(this.data)
       this.chart = new uCharts({
         $this: this,
         canvasId: canvasId,
@@ -61,7 +72,7 @@ export default {
         animation: false,
         xAxis: {
           disableGrid: true,
-          labelCount: 3,
+          labelCount: 4,
           boundaryGap: 'justify',
           axisLine: false
         },
@@ -96,7 +107,7 @@ export default {
     },
     initChartData(data) {
       let data1 = {};
-      data1.categories = data.map(item => String(item.createTime2));
+      data1.categories = data.map(item => String(item.createTime2.slice(11,16)));
       data1.series = [];
       data1.series[0] = {};
       data1.series[0].data = [];

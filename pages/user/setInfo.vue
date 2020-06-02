@@ -21,7 +21,7 @@
 		<view class="list">
 			<view>版本号</view>
 			<view>
-				<text>V1.2.2</text>
+				<text>V1.2.5</text>
 				<image class="rt" src="../../static/images/right_2.png"></image>
 			</view>
 		</view>

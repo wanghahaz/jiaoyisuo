@@ -15,14 +15,14 @@ let fn = {
 function toast(obj) {
   uni.showToast({
     icon: obj.icon || 'none',
-    title: obj.text,
+    title: obj.text||'',
     duration: obj.time || 2000
   })
 }
 
 function loading(type, text) {
   type == 1 ? uni.showLoading({
-    title: text
+    title: text||''
   }) : uni.hideLoading()
 }
 
@@ -30,7 +30,9 @@ function model(obj) {
   return new Promise((resolve, reject) => {
     uni.showModal({
       title: obj.title || '提示',
-      content: obj.text,
+      content: obj.text||'',
+      confirmText:obj.stext||'确认',
+      cancelText:obj.etext||'取消',
       success: function(res) {
         if (res.confirm) {
           resolve(1)

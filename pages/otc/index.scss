@@ -11,12 +11,43 @@ $active: #534dff;
   height: var(--status-bar-height);
   /* #endif */
 }
-
-
+.header {
+  position: fixed;
+  width: 100%;
+  height: 44px;
+  align-items: center;
+  background: $active;
+  top: 0;
+  left: 0;
+  color: #fff;
+  z-index: 99;
+  /* #ifdef APP-PLUS */
+  top: var(--status-bar-height);
+  /* #endif */
+  justify-content: center;
+  font-size: 32upx;
+  .icons {
+    position: absolute;
+    left: 2%;
+  }
+}
+//文字省略
+.ellips {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+// 加载全部
+.nomore {
+  line-height: 90upx;
+  text-align: center;
+  color: #c3c3c3;
+  background: #fff;
+  font-size: 30upx;
+}
 //蓝色阴影
- .blue_shadow{
-    box-shadow:0px 6px 16px -6px $active
- }
+.blue_shadow {
+  box-shadow: 0px 6px 16px -6px $active;
+}
 
 .flex {
   display: flex;

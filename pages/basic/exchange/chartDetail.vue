@@ -4,12 +4,13 @@
 			<view class="coinInfo" v-if="marketInfo">
 				<view @click="selectCoin" v-if="marketInfo">
 					<!-- <text>{{marketInfo.coinName}}/{{marketInfo.marketCoinName}}</text> -->
-					<text>{{marketInfo.marketCoinCnName}}</text>
+					<text>{{marketInfo.coinCnName}}</text>
+          <text>{{marketInfo.coinName}}</text>
 					<!-- <text class="iconfont iconlujing1"></text> -->
 				</view>
 				<view>
-					<text :class="{up: marketInfo.incRate >= 0, down: marketInfo.incRate < 0}">${{marketInfo.lastTradePrice}}</text>
-		<!-- 			<view @click="collection">
+					<text :class="{up: marketInfo.incRate >= 0, down: marketInfo.incRate < 0}">￥{{marketInfo.lastTradePrice}}</text>
+          <!--<view @click="collection">
 						<text class="iconfont iconshoucang5"></text>
 						<text>添加自选</text>
 					</view> -->
@@ -192,7 +193,6 @@ export default {
 			uni.onSocketMessage(res => {
         loading(2)
 				let data = JSON.parse(res.data)
-				console.log(JSON.parse(res.data))
 				this.selldeepList = data.sellList
 				this.buydeepList = data.buyList
 				this.newDealList = data.tradeList

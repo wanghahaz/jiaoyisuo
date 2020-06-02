@@ -60,7 +60,7 @@ export default {
         padding: [15, 15, 0, 15],
         legend: {
           show: true,
-          padding: 5,
+          padding: 15,
           lineHeight: 11,
           margin: 8,
           fontColor: '#B6BEC8'
@@ -187,7 +187,7 @@ export default {
     },
     initChartData1(data) {
       let data1 = {};
-      data1.categories = data.map(item => String(item.createTime2));
+      data1.categories = data.map(item => String(item.createTime2).slice(0,10));
       data1.series = [];
       data1.series[0] = {};
       data1.series[0].data = [];
@@ -198,7 +198,7 @@ export default {
     },
     initChartData2(data) {
       let data2 = {};
-      data2.categories = data.map(item => String(item.createTime2));
+      data2.categories = data.map(item => String(item.createTime2).slice(0,8));
       data2.series = [];
       data2.series[0] = {};
       data2.series[0].data = [];

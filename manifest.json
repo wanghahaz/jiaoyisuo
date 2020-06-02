@@ -1,13 +1,13 @@
 {
     "name" : "SuperCulture",
     /*__UNI__C75A8D6 H57EE631E*/
-    "appid" : "__UNI__H57EE631E",
+    "appid" : "__UNI__9EF03D4",
     "description" : "SuperCulture - 文化领域数字经济",
-    "versionName" : "1.2.3",
-    "versionCode" : 123,
+    "versionName" : "1.2.5",
+    "versionCode" : 125,
     "transformPx" : false,
-    "networkTimeout":{
-      "request":30000
+    "networkTimeout" : {
+        "request" : 30000
     },
     "app-plus" : {
         /* 5+App特有相关 */
@@ -90,7 +90,8 @@
                 }
             }
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "compilerVersion" : 2
     },
     /* SDK配置 */
     "quickapp" : {},
@@ -117,11 +118,11 @@
             "proxy" : {
                 "/api" : {
                     "target" : "http://39.98.79.218:8080/oax-web-1.0",
-                   /* "target" : "http://192.168.1.40:8080",*/
+                    /* "target" : "http://192.168.1.40:8080",*/
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {
-                       "^/api" :"/"
+                        "^/api" : "/"
                     }
                 }
             }

@@ -359,6 +359,11 @@
         "navigationBarTitleText": "资金划转"
       }
     }, {
+      "path": "pages/contract/editPay",
+      "style": {
+        "navigationBarTitleText": "资金划转"
+      }
+    }, {
       "path": "pages/contract/sellPotence",
       "style": {
         "navigationBarTitleText": "期权卖方权限"
@@ -383,6 +388,12 @@
       "path": "pages/otc/orderContent",
       "style": {
         "navigationBarTitleText": "订单详情",
+        "navigationStyle": "custom"
+      }
+    }, {
+      "path": "pages/otc/buyOtc",
+      "style": {
+        "navigationBarTitleText": "购买SC",
         "navigationStyle": "custom"
       }
     }
