@@ -1,8 +1,5 @@
 <template>
   <view class="content">
-    <!-- 		<view class="tabs">
-			<QSTabs :tabs="tabs" :current="currentTab" minWidth="120" activeColor="#5DC1CF" defaultColor="#000" :activeBold="false" animationMode="line1" space="20" @change="changeTab" ref="tabs"></QSTabs>
-		</view> -->
     <view class="main">
       <view class="bg">
         <image src="../../static/images/bg_3.png"></image>
@@ -27,26 +24,12 @@
               <text>合约余额</text>
               <text>{{ total.contractAccountBalances.toFixed(2) }}</text>
             </view>
-            <!-- <view>
-              <text>资金余额</text>
-              <text>{{ total.scTotalBanlance || 0 }}</text>
-            </view>
-            <view>
-              <text>市值</text>
-              <text>{{ total.totalBanlance || 0 }}</text>
-            </view>
-            <view>
-              <text>资金可取</text>
-              <text>{{ total.scBanlance || 0 }}</text>
-            </view> -->
+          
           </view>
         </view>
       </view>
       <view class="list bcf">
-        <!-- 				<view class="line bb">
-					<view class="ft6">资产列表</view>
-					<view class="pd23" @click="jumpAdd"><uni-icons type="plusempty" size="15"></uni-icons><text>添加资产</text></view>
-				</view> -->
+      
         <view class="title">
           <text style="width: 30%">名称/代码</text>
           <text style="width: 40%;text-align: center;">产品数量/可卖数量</text>

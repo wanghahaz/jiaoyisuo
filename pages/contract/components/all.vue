@@ -1,7 +1,7 @@
 <template>
   <view class="all_contract">
     <view @click="toRouter('/pages/contract/simple', {})" class="simple">
-      <image class="toImg" src="../../static/images/contract/simple.png" mode=""></image>
+      <image class="toImg" src="../../../static/images/contract/simple.png" mode=""></image>
       <view class="toText">
         <text>期权简选</text>
         <uni-icons size="16" color="#534dff" type="forward"></uni-icons>

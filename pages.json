@@ -7,13 +7,7 @@
         "navigationBarTextStyle": "black",
         "app-plus": {
           "titleNView": {
-            "buttons": [{
-              "fontSrc": "/static/iconfont/iconfont.ttf",
-              "fontSize": "16px",
-              "text": "\ue63a",
-              "width": "25px"
-            }],
-            "backgroundColor": "#fff"
+
           }
         }
       }
@@ -410,12 +404,6 @@
         "selectedIconPath": "static/images/tabbar/tabbar_2-2.png"
       },
       {
-        "pagePath": "pages/otc/index",
-        "text": "otc",
-        "iconPath": "static/images/tabbar/tabbar_3-1.png",
-        "selectedIconPath": "static/images/tabbar/tabbar_3-2.png"
-      },
-      {
         "pagePath": "pages/wallet/index",
         "text": "钱包",
         "iconPath": "static/images/tabbar/tabbar_3-1.png",
@@ -426,6 +414,12 @@
         "text": "合约",
         "iconPath": "static/images/tabbar/contract.png",
         "selectedIconPath": "static/images/tabbar/contract_act.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "static/images/tabbar/tabbar_4-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_4-2.png"
       }
     ]
   }

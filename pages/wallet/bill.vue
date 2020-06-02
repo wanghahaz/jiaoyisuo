@@ -42,8 +42,6 @@
           <view class="center">
             <view class="center_left">
               <text class="btnBuy" :class="val.type == 1 ? 'buy' : 'sell'" v-if="typeF == 3">{{ val.type == 1 ? '买入' : '卖出' }}</text>
-              <!-- <image class="buy" v-if="typeF == 3 && val.type == 1" src="../../static/images/wallet/buy.png" mode=""></image>
-              <image class="buy" v-if="typeF == 3 && val.type == 2" src="../../static/images/wallet/buy.png" mode=""></image> -->
               <text v-if="typeF == 3">{{ val.cnName }} {{ val.shortName }}</text>
               <text v-else>{{ 'SC' }}</text>
             </view>

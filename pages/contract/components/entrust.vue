@@ -5,8 +5,8 @@
         <view class="box_content">
           <view class="left_content">
             <text>{{ item.contractName }}</text>
-            <image v-if="item.buyOrSell == 1" class="img_" src="../../static/images/wallet/buy.png" mode=""></image>
-            <image v-else class="img_" src="../../static/images/wallet/sell.png" mode=""></image>
+            <image v-if="item.buyOrSell == 1" class="img_" src="../../../static/images/wallet/buy.png" mode=""></image>
+            <image v-else class="img_" src="../../../static/images/wallet/sell.png" mode=""></image>
           </view>
           <text class="text_">{{ status[item.status] }}</text>
         </view>

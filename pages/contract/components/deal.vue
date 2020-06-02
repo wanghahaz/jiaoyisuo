@@ -52,8 +52,8 @@
             <view class="box_content">
               <view class="left_content">
                 <text>{{ item.contractName }}</text>
-                <image v-if="item.type == 1" class="img_" src="../../static/images/wallet/buy.png"></image>
-                <image v-else class="img_" src="../../static/images/wallet/sell.png"></image>
+                <image v-if="item.type == 1" class="img_" src="../../../static/images/wallet/buy.png"></image>
+                <image v-else class="img_" src="../../../static/images/wallet/sell.png"></image>
               </view>
               <text @click.stop="back_(true, 5, item.id)" class="text_ cancel">撤单</text>
             </view>
@@ -73,7 +73,7 @@
             <view class="box_content">
               <view class="left_content">
                 <text class="contractName">{{ item.contractName }}</text>
-                <image class="img_" src="../../static/images/wallet/buy.png" mode=""></image>
+                <image class="img_" src="../../../static/images/wallet/buy.png" mode=""></image>
               </view>
             </view>
             <text class="time">{{ item.createTime }}</text>

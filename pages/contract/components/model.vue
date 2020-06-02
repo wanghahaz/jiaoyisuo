@@ -4,7 +4,7 @@
     <view @click="closeMask" v-if="model_show" class="maskBox"></view>
     <view v-if="model_show" class="maskContent">
       <view class="mask_header">
-        <image class="bg_mask" src="../../static/images/contract/mask_head.png" mode=""></image>
+        <image class="bg_mask" src="../../../static/images/contract/mask_head.png" mode=""></image>
         <text class="text_mask">{{ headerType[subType] }}</text>
       </view>
       <view class="mask_sell" v-if="subType == 1 || subType == 2">

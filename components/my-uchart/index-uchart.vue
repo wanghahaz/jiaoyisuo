@@ -96,7 +96,7 @@ export default {
     },
     initChartData(data) {
       let data1 = {};
-      data1.categories = data.map(item => String(item.createTime2));
+      data1.categories = data.map(item => String(item.createTime2.slice(11,16)));
       data1.series = [];
       data1.series[0] = {};
       data1.series[0].data = [];
