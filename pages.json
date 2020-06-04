@@ -249,6 +249,12 @@
       }
     },
     {
+      "path": "pages/user/receivingSet",
+      "style": {
+        "navigationBarTitleText": "收付款设置"
+      }
+    },
+    {
       "path": "pages/user/invitation",
       "style": {
         "navigationBarTitleText": "我的邀请"

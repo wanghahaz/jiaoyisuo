@@ -5,14 +5,14 @@
       <text>SC</text>
     </view>
     <view class="move">
-      <view @click="toRouter('/pages/contract/editPay',{type:1})">
+      <view @click="toRouter('/pages/contract/editPay', { type: 1 })">
         <text>SC</text>
-        <text>{{leftName}}</text>
+        <text>{{ leftName }}</text>
       </view>
       <image src="../../static/images/contract/mo_tab.png" mode=""></image>
-      <view @click="toRouter('/pages/contract/editPay',{type:2})">
+      <view @click="toRouter('/pages/contract/editPay', { type: 2 })">
         <text>SC</text>
-        <text>{{rightName}}</text>
+        <text>{{ rightName }}</text>
       </view>
     </view>
     <!-- from -->
@@ -38,8 +38,8 @@ export default {
     return {
       back: 1,
       money: 1314.25,
-      leftName:'币币账户',
-      rightName:'期权合约账户',
+      leftName: '币币账户',
+      rightName: '期权合约账户',
       from: {
         contractType: 1,
         transactionPassword: '',
@@ -81,7 +81,10 @@ export default {
       myAxios.moenyMove(this.from).then(res => {
         console.log(res);
         if (res.code == 1) {
-          this.goBack(this.back);
+          toast({ text: '划转成功' });
+          setTimeout(() => {
+            this.goBack(this.back);
+          }, 1500);
         } else {
           toast({ text: '资金划转失败' });
         }

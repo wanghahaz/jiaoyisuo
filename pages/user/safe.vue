@@ -24,7 +24,7 @@
     <view class="list bdline" @click="jumpChange('2')">
       <view>手机号</view>
       <view>
-        <text>{{ info.phone? info.phone.slice(4) : '您还没绑定手机' }}</text>
+        <text>{{ info.phone ? info.phone.slice(4) : '您还没绑定手机' }}</text>
         <image class="rt" src="../../static/images/right_2.png"></image>
       </view>
     </view>
@@ -77,7 +77,7 @@
       <view class="md_title">请输入验证码</view>
       <view class="md_input">
         <view class="">
-          <text>手机号 {{ info.phone?info.phone.slice(4):'' }}</text>
+          <text>手机号 {{ info.phone ? info.phone.slice(4) : '' }}</text>
         </view>
         <view class="">
           <text>验证码：</text>
@@ -128,7 +128,7 @@ export default {
     async getUserCenter() {
       let res = await userCenter();
       let setVuxCenter = {
-        id:res.data.usercenter.id,
+        id: res.data.usercenter.id,
         emailStatus: res.data.usercenter.emailStatus,
         phoneStatus: res.data.usercenter.phoneStatus,
         googleStatus: res.data.usercenter.googleStatus,
@@ -137,7 +137,7 @@ export default {
         transactionPasswordIsNull: res.data.usercenter.transactionPasswordIsNull
       };
       this.setUserCenter(setVuxCenter);
-      console.log(res.data)
+      console.log(res.data);
       this.info = setVuxCenter;
       let userInfo = uni.getStorageSync('userinfo');
       userInfo.phone = res.data.usercenter.phone;
@@ -169,15 +169,15 @@ export default {
           smsCode: this.code
         });
       } else {
-        res =await switchCheck({
+        res = await switchCheck({
           type: this.type,
           status: this.info[this.eType] == 0 ? 1 : 0
         });
       }
-      console.log(res)
       if (res.code == 0) {
         toast({ text: res.msg });
       } else {
+        toast({ text: res.msg });
         this.info[this.eType] = this.info[this.eType] == 0 ? 1 : 0;
         this.showModel = false;
         this.getUserCenter();

@@ -1,24 +1,24 @@
 <template>
   <view class="wallet_box ">
-    <view class="header flex">
+    <view v-if="total" class="header flex">
       <image class="bg" src="../../static/images/wallet/bg.png" mode=""></image>
       <text class="white">账户总资产</text>
-      <view class="white all">
-        <text>28389300</text>
+      <view class="white all" >
+        <text>{{total.totalBanlance || 0}}</text>
         <text>SC</text>
       </view>
       <view class="bill flex">
         <view>
-          <text>币币余额</text>
-          <text>2434.00</text>
+          <text>资产余额</text>
+          <text>{{ total&&total.scTotalBanlance.toFixed(2) }}</text>
         </view>
         <view>
           <text>币币余额</text>
           <text>2434.00</text>
         </view>
         <view>
-          <text>币币余额</text>
-          <text>2434.00</text>
+          <text>合约余额</text>
+          <text>{{ total&&total.contractAccountBalances.toFixed(2) }}</text>
         </view>
       </view>
       <view class="router flex">
@@ -59,13 +59,9 @@ export default {
   data() {
     return {
       status_:'loading',
-      coinList:[{
-        totalBanlance:'200.00',
-        banlance:'100.00',
-        lastTradePrice:'200.00',
-        shortName:'SC',
-        coinCnName:'迷幻琥珀'
-      }]
+      coinList:[],
+      total:null,
+      
     };
   },
   onNavigationBarButtonTap() {
