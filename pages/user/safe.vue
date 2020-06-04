@@ -178,6 +178,7 @@ export default {
       if (res.code == 0) {
         toast({ text: res.msg });
       } else {
+        toast({ text: res.msg });
         this.info[this.eType] = this.info[this.eType] == 0 ? 1 : 0;
         this.showModel = false;
         this.getUserCenter();

@@ -15,16 +15,10 @@
     {
       "path": "pages/my_select/index",
       "style": {
-        "navigationBarTitleText": "自选区",
+        "navigationBarTitleText": "行情",
         "navigationBarTextStyle": "black",
         "app-plus": {
           "titleNView": {
-            "buttons": [{
-              "fontSrc": "/static/iconfont/iconfont.ttf",
-              "fontSize": "16px",
-              "text": "\ue687"
-            }],
-            "backgroundColor": "#fff"
           }
         }
       }
@@ -393,15 +387,15 @@
     "iconWidth": "24px",
     "list": [{
         "pagePath": "pages/basic/index",
-        "text": "行情",
-        "iconPath": "static/images/tabbar/tabbar_1-1.png",
-        "selectedIconPath": "static/images/tabbar/tabbar_1-2.png"
+        "text": "首页",
+        "iconPath": "static/images/tabbar/tabbar_2-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_2-2.png"
       },
       {
         "pagePath": "pages/my_select/index",
-        "text": "自选区",
-        "iconPath": "static/images/tabbar/tabbar_2-1.png",
-        "selectedIconPath": "static/images/tabbar/tabbar_2-2.png"
+        "text": "行情",
+        "iconPath": "static/images/tabbar/tabbar_1-1.png",
+        "selectedIconPath": "static/images/tabbar/tabbar_1-2.png"
       },
       {
         "pagePath": "pages/wallet/index",

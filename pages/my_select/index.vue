@@ -1,12 +1,32 @@
 <template>
   <view class="my_selectbox">
-    <view class="thead">
+    <view class="v_centent" v-if="type == 2">
+      <view class="v_header flex item_list">
+        <view><text>币对名称</text></view>
+        <view @click="editsort"><text>最新成交价</text></view>
+        <!-- <uni-icons size="15" color="#534DFF" :type="sort==1?'arrowthinup':'arrowthindown'"/> -->
+        <view><text>涨跌幅</text></view>
+      </view>
+      <view class="item_list flex" v-for="(item, ind) in list" :key="ind">
+        <view>
+          <text>{{ item.instrument_id }}</text>
+          <text class="base_volume">成交量:{{ (item.base_volume_24h / 1).toFixed(2) }}</text>
+        </view>
+        <view>
+          <text>$ {{ item.last || item.last.toFixed(2) }}</text>
+        </view>
+        <view class="v_box">
+          <text :class="((item.last - item.open_24h) / item.open_24h) * 100 > 0 ? 'up' : 'fall'">{{ (((item.last - item.open_24h) / item.open_24h) * 100).toFixed(2) + '%' }}</text>
+        </view>
+      </view>
+    </view>
+    <view v-if="type == 1" class="thead">
       <text style="width:30%;text-align: left">名称</text>
       <text style="width:25%">最新(USDT)</text>
       <text style="width:24%">涨跌</text>
       <text style="width:21%;text-align: right">涨幅</text>
     </view>
-    <view class="content">
+    <view class="content" v-if="type == 1">
       <view class="item" v-for="item in mineList" :key="item.marketId">
         <view class="maininfo" @click="gotoExchange(item.marketId)">
           <view class="name" style="width:30%;text-align: left">
@@ -30,19 +50,98 @@
 </template>
 
 <script>
+let data = [
+  {
+    best_ask: '237.19',
+    best_bid: '237.18',
+    instrument_id: 'ETH-USDT',
+    product_id: 'ETH-USDT',
+    last: '237.2',
+    last_qty: '0.021077',
+    ask: '237.19',
+    best_ask_size: '13.791087',
+    bid: '237.18',
+    best_bid_size: '71.827083',
+    open_24h: '249.34',
+    high_24h: '253.84',
+    low_24h: '224.3',
+    base_volume_24h: '635767.921973',
+    timestamp: '2020-06-03T08:06:56.048Z',
+    quote_volume_24h: '151150712.62'
+  }
+];
+let timers = null;
 import { indexPage } from '@/api/index_api';
-
+import * as myAjax from './index.js';
+import uniIcons from '@/components/uni-icons/uni-icons.vue';
 export default {
   data() {
     return {
+      sort: 1,
+      load: 1,
       currentTabIndex: 1,
-      mineList: []
+      mineList: [],
+      list: [],
+      type: 1
     };
+  },
+  components: {
+    uniIcons
   },
   onLoad() {
     // uni.hideTabBar()
   },
+  beforeDestroy() {},
+  onHide() {
+    clearInterval(timers);
+  },
   methods: {
+    editsort() {
+      this.sort = this.sort == 1 ? 2 : 1;
+    },
+    times() {
+      timers = setInterval(() => {
+        this.getApp();
+      }, 3000);
+    },
+    async getApp() {
+      let that = this;
+      if (this.load) {
+        uni.showLoading({
+          title: '加载中'
+        });
+      }
+      // let list = await myAjax.Ajax0();
+      // let list1 = await myAjax.Ajax1();
+      // let list10 = await myAjax.Ajax10();
+      // let list2 = await myAjax.Ajax2();
+      // let list3 = await myAjax.Ajax3();
+      // let list4 = await myAjax.Ajax4();
+      // let list11 = await myAjax.Ajax11();
+      // let list5 = await myAjax.Ajax5();
+      // let list6 = await myAjax.Ajax6();
+      // let list7 = await myAjax.Ajax7();
+      // let list8 = await myAjax.Ajax8();
+      // let list9 = await myAjax.Ajax9();
+      // uni.hideLoading()
+      // this.load= 0;
+      // this.list = [list,list10, list1, list2, list3, list4,list11, list5, list6, list7, list8, list9];
+      Promise.all([myAjax.Ajax0(), myAjax.Ajax1(),myAjax.Ajax10(), myAjax.Ajax2(), myAjax.Ajax3(), myAjax.Ajax4(), myAjax.Ajax5(),myAjax.Ajax11(), myAjax.Ajax6(), myAjax.Ajax7(), myAjax.Ajax8(), myAjax.Ajax9()])
+        .then(res => {
+          console.log(res);
+          that.list = res;
+          that.load = 0;
+          uni.hideLoading();
+          //所有请求都成功后执行函数
+        })
+        .catch((err) => {
+          console.log(err)
+          that.load = 0;
+          uni.hideLoading();
+          uni.showToast('加载失败');
+          //// 异常处理
+        });
+    },
     // 点击去交易
     gotoExchange(id) {
       uni.navigateTo({
@@ -61,20 +160,94 @@ export default {
       url: '/pages/basic/search'
     });
   },
-  async onShow() {
-    let indexData = await indexPage();
-    this.mineList = indexData.data.userMaketList;
-    // console.log(this.mineList);
+  onShow() {
+    /* #ifdef H5 */
+    this.type = 1;
+    // let indexData = await indexPage();
+    // this.mineList = indexData.data.userMaketList;
+    /* #endif */
+
+    /* #ifdef APP-PLUS */
+    this.type = 2;
+    this.getApp();
+    this.times();
+    /* #endif */
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.flex {
+  display: flex;
+}
+.v_header {
+  margin-top: 1px;
+}
+.ellips {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.v_centent {
+  .item_list {
+    padding: 30upx 5%;
+    border-bottom: 1px solid #f5f5f5;
+    justify-content: space-between;
+    font-size: 34upx;
+    > view {
+      display: flex;
+      // flex: 1;
+      width: 33%;
+      align-items: center;
+    }
+    > view:nth-of-type(1) {
+      flex-direction: column;
+      align-items: flex-start;
+      text,
+      view {
+        width: 100%;
+        @extend .ellips;
+      }
+    }
+    > view:nth-of-type(2) {
+      justify-content: center;
+    }
+    > view:nth-of-type(3) {
+      justify-content: flex-end;
+    }
+    .base_volume {
+      margin-top: 4upx;
+      font-size: 22upx;
+      color: #999;
+    }
+    .v_box {
+      text {
+        text-align: center;
+        border-radius: 4upx;
+        width: 60%;
+        font-size: 30upx;
+        height: 64upx;
+        line-height: 64upx;
+        color: #fff;
+      }
+      .up {
+        background: #00c188;
+      }
+      .fall {
+        background: #fa3354;
+      }
+    }
+  }
+  > view:last-child {
+    border: none;
+  }
+}
+
 page {
   height: 100%;
 }
 .my_selectbox {
-  height: calc(100% - 4px);
+  padding-bottom: 20px;
+  // height: calc(100% - 4px);
   background-color: #fff;
   .thead {
     display: flex;

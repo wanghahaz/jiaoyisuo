@@ -9,7 +9,7 @@
 					<!-- <text class="iconfont iconlujing1"></text> -->
 				</view>
 				<view>
-					<text :class="{up: marketInfo.incRate >= 0, down: marketInfo.incRate < 0}">￥{{marketInfo.lastTradePrice}}</text>
+					<text :class="{up: marketInfo.incRate >= 0, down: marketInfo.incRate < 0}">￥{{(marketInfo.lastTradePrice).toFixed(2)}}</text>
 		<!-- 			<view @click="collection">
 						<text class="iconfont iconshoucang5"></text>
 						<text>添加自选</text>
@@ -17,14 +17,14 @@
 				</view>
 				<view>
 					<view class="">						
-						<text>≈{{cnyprice * marketInfo.lastTradePrice}}CNY</text>
+						<text>≈{{(cnyprice * marketInfo.lastTradePrice).toFixed(2)}}CNY</text>
 						<text :class="{up: marketInfo.incRate >= 0, down: marketInfo.incRate < 0}" v-if="marketInfo">{{marketInfo.incRate}}%</text>
 					</view>
-					<text>最高 {{marketInfo.maxPrice}}</text>
+					<text>最高 {{(marketInfo.maxPrice).toFixed(2)}}</text>
 				</view>
 				<view>
-					<text>24H量 {{marketInfo.tradeQty}}</text>
-					<text>最低 {{marketInfo.minPrice}}</text>
+					<text>24H量 {{(marketInfo.tradeQty).toFixed(2)}}</text>
+					<text>最低 {{(marketInfo.minPrice).toFixed(2)}}</text>
 				</view>
 			</view>
 			<view class="kline">

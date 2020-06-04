@@ -36,7 +36,7 @@
 				<text class="iconfont iconbianzu" @click="ispsw1 = !ispsw1" v-else></text>
 			</view>
 			<view class="form_item">
-				<input type="text" v-model="uid1" placeholder="推荐人uid(选填)"/>
+				<input type="text" v-model="uid1" placeholder="推荐人邀请码(选填)"/>
 			</view>
 		</view>
 		<view class="form" v-if="nav_num == 1">
@@ -54,7 +54,7 @@
 				<text class="iconfont iconbianzu" @click="ispsw2 = !ispsw2" v-else></text>
 			</view>
 			<view class="form_item">
-				<input type="text" v-model="uid2" placeholder="推荐人uid(选填)"/>
+				<input type="text" v-model="uid2" placeholder="推荐人邀请码(选填)"/>
 			</view>
 		</view>
 		<view class="btnBox">

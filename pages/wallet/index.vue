@@ -15,14 +15,14 @@
           </view>
           <!-- <text class="withdraw" @click="jump('/pages/wallet/withdrawMoney', { coidId: total.coidId, qty: total.scBanlance })">提现</text> -->
           <view  class="myinfo">
-            <view v-if="total.scTotalBanlance||(total.scTotalBanlance==0)" class="">
+            <view  class="">
               <text>资金余额</text>
-              <text>{{ total.scTotalBanlance.toFixed(2) }}</text>
+              <text>{{ total.scTotalBanlance?total.scTotalBanlance.toFixed(2):total.scTotalBanlance }}</text>
             </view>
             <image @click="jump('/pages/contract/moneyMove',{})" src="../../static/images/wallet/huazhuan.png" mode=""></image>
-            <view v-if="total.contractAccountBalances||( total.contractAccountBalances==0)" class="">
+            <view  class="">
               <text>合约余额</text>
-              <text>{{ total.contractAccountBalances.toFixed(2) }}</text>
+              <text>{{ total.contractAccountBalances?total.contractAccountBalances.toFixed(2):total.contractAccountBalances }}</text>
             </view>
           
           </view>
@@ -41,7 +41,7 @@
             <text>{{ item.shortName }}</text>
           </view>
           <text class="ellips" style="width: 40%;text-align: center;">{{ item.totalBanlance }}/{{ item.banlance }}</text>
-          <text style="width: 30%;text-align: right;">{{ item.lastTradePrice }}</text>
+          <text class="ellips" style="width: 30%;text-align: right;">{{ item.lastTradePrice }}</text>
         </view>
       </view>
     </view>

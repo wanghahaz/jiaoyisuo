@@ -97,7 +97,7 @@
         <view class="button" :class="{ active: currentTab == 0 }" @click="changetab('0')"><text>盘口</text></view>
         <view class="button" :class="{ active: currentTab == 1 }" @click="changetab('1')"><text>明细</text></view>
       </view>
-      <view class="content" v-if="selldeepList.length && buydeepList.length">
+      <view class="content" v-if="selldeepList.length ||buydeepList.length ">
         <view class="pankou" v-if="currentTab == 0">
           <view>
             <view v-for="(item, index) in selldeepList.slice(0, 5)" :key="index">
@@ -202,6 +202,7 @@ export default {
         this.userInfo = data.userData;
         this.selldeepList = data.sellList;
         this.buydeepList = data.buyList;
+        // console.log(this.selldeepList,this.buydeepList)
         this.tradeList = data.tradeList;
         this.klineList = data.klineList;
         this.marketInfo = data.marketInfo;
