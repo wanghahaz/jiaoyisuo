@@ -6,17 +6,17 @@
           <image src="../../static/images/otc/zfb.png" mode=""></image>
           <text>支付宝</text>
         </view>
-        <view @click="toRouter('/pages/wallet/addBank',{type:1})" class="flex">
+        <view v-if="aliList.length == 0" @click="toRouter('/pages/wallet/addBank', { type: 1 })" class="flex">
           <text>添加</text>
           <uni-icons size="16" class="right" type="arrowright" />
         </view>
       </view>
-      <view class="list">
+      <view class="list"  @click="toRouter('/pages/wallet/addBank', { type: 1, edit: 1, id: item.id })" v-for="(item, ind) in aliList">
         <view class="flex">
           <text class="name_">CNY</text>
           <view class="infor flex">
-            <view><text>张三</text></view>
-            <view><text>18500352421@163.com</text></view>
+            <view><text>{{item.userName}}</text></view>
+            <view><text>{{item.account}}</text></view>
           </view>
         </view>
       </view>
@@ -27,17 +27,22 @@
           <image src="../../static/images/otc/bank.png" mode=""></image>
           <text>银行卡</text>
         </view>
-        <view @click="toRouter('/pages/wallet/addBank',{type:0})" class="flex">
+        <view v-if="bankList.length < 10" @click="toRouter('/pages/wallet/addBank', { type: 0 })" class="flex">
           <text>添加</text>
           <uni-icons size="16" class="right" type="arrowright" />
         </view>
       </view>
-         <view class="list">
+      <view class="list" v-for="item in bankList" @click="toRouter('/pages/wallet/addBank', { type: 0, edit: 1, id: item.id })" :key="item.id">
         <view class="flex">
           <text class="name_">CNY</text>
           <view class="infor flex">
-            <view><text>张三</text><text>农业银行</text></view>
-            <view><text>521754564564545</text></view>
+            <view>
+              <text>{{ item.userName }}</text>
+              <text>{{ item.bankAddress }}</text>
+            </view>
+            <view>
+              <text>{{ item.address }}</text>
+            </view>
           </view>
         </view>
       </view>
@@ -48,15 +53,29 @@
 <script>
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import { toast, loading, model, fn } from '@/common/common.js';
+import * as myAjax from '@/api/receiving.js';
 export default {
   name: 'receivingSet',
   data() {
-    return {};
+    return {
+      aliList: [],
+      bankList: []
+    };
   },
   onLoad(e) {},
-  onShow() {},
+  async onShow() {
+    this.aliList =[];
+    this.bankList=[]
+    let id = uni.getStorageSync('userinfo').userId;
+    loading('1', '加载中');
+    let ali = await myAjax.aliList();
+    let bank = await myAjax.bankList();
+    loading();
+    if (ali.code == 1) this.aliList = ali.data;
+    if (bank.code == 1) this.bankList = bank.data.list;
+  },
   methods: {
-    toRouter(url,data){
+    toRouter(url, data) {
       uni.navigateTo({
         url: url + fn.params(data)
       });
@@ -81,7 +100,7 @@ view {
   .box {
     margin: 1px 0 20px 0;
     background: #fff;
-    >view {
+    > view {
       padding: 0 5%;
     }
     .list {
@@ -93,27 +112,27 @@ view {
         border-radius: 6px 6px 0 0;
         height: 180upx;
         color: #fff;
-        .name_{
-          background: #FFC13B;
+        .name_ {
+          background: #ffc13b;
           height: 44upx;
           padding: 0 6px;
           border-radius: 12upx;
           line-height: 44upx;
           font-size: 30upx;
         }
-        .infor{
+        .infor {
           flex-direction: column;
           justify-content: space-between;
           margin-left: 10px;
-          >view:nth-of-type(1){
+          > view:nth-of-type(1) {
             font-size: 34upx;
           }
-          >view:nth-of-type(2){
+          > view:nth-of-type(2) {
             font-size: 28upx;
           }
-          >view{
+          > view {
             display: flex;
-            >text{
+            > text {
               margin-right: 20px;
             }
           }

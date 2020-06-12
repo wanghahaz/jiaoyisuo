@@ -72,7 +72,7 @@ export function getPower(){
 export function moenyMove(data){
   return new Promise((resolve, reject) => {
   	request.post({
-  		url: `/optionContract/coinAccountToContractAccount`,
+  		url: `/optionContract/moneyTransfer`,
       data
   	}).then(res => {
   		resolve(res)

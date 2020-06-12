@@ -5,12 +5,12 @@
       <text>SC</text>
     </view>
     <view class="move">
-      <view @click="toRouter('/pages/contract/editPay', { type: 1 })">
+      <view @click="toRouter('/pages/contract/editPay', { type: 1,leftName:leftName })">
         <text>SC</text>
         <text>{{ leftName }}</text>
       </view>
       <image src="../../static/images/contract/mo_tab.png" mode=""></image>
-      <view @click="toRouter('/pages/contract/editPay', { type: 2 })">
+      <view @click="toRouter('/pages/contract/editPay', { type: 2 ,leftName:leftName})">
         <text>SC</text>
         <text>{{ rightName }}</text>
       </view>
@@ -32,16 +32,23 @@
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import * as myAxios from '@/api/contract_api.js';
 import { toast, loading, model, fn } from '@/common/common.js';
+//1.期权合约账户 2.永续合约账户 3.交割合约账户 4.币币账户 5.法币账户
+let type ={
+  '期权合约账户':'1',
+  '永续合约账户':'2',
+  '交割合约账户':'3',
+  '币币账户':'4',
+  '法币账户':'5'
+}
 export default {
   name: 'moneyMove',
   data() {
     return {
       back: 1,
-      money: 1314.25,
+      money: 0,
       leftName: '币币账户',
       rightName: '期权合约账户',
       from: {
-        contractType: 1,
         transactionPassword: '',
         money: ''
       }
@@ -59,9 +66,9 @@ export default {
     } else {
       this.back = 2;
     }
+    this.getMoney();
   },
   onShow() {
-    this.getMoney();
   },
   methods: {
     getMoney() {
@@ -75,11 +82,10 @@ export default {
     btn() {
       if (!this.btnActive) return;
       if (this.money <= this.from.money) {
+        toast({text:'请填写正确的金额'})
         return;
       }
-      console.log(this.from);
-      myAxios.moenyMove(this.from).then(res => {
-        console.log(res);
+      myAxios.moenyMove(Object.assign(this.from,{fromType:type[this.leftName],toType:type[this.rightName]})).then(res => {
         if (res.code == 1) {
           toast({ text: '划转成功' });
           setTimeout(() => {

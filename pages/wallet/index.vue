@@ -9,13 +9,14 @@
       </view>
       <view class="bill flex">
         <view>
-          <text>资产余额</text>
-          <text>{{ total&&total.scTotalBanlance.toFixed(2) }}</text>
+          <text>币币余额</text>
+            <text>{{ total&&total.scBanlance.toFixed(2) }}</text>
         </view>
         <view>
-          <text>币币余额</text>
-          <text>2434.00</text>
+          <text>OTC余额</text>
+          <text>{{ total&&total.otcAccountBalances.toFixed(2) }}</text>
         </view>
+      
         <view>
           <text>合约余额</text>
           <text>{{ total&&total.contractAccountBalances.toFixed(2) }}</text>
@@ -68,9 +69,10 @@ export default {
     this.toRouter('/pages/wallet/withdrawMoney', { coidId: this.total.coidId, qty: this.total.scBanlance || '0' });
   },
   onLoad(e) {
-    this.propertyList()
   },
-  onShow() {},
+  onShow() {
+      this.propertyList()
+  },
   methods: {
     propertyList() {
       loading(1, '加载中');

@@ -1,52 +1,67 @@
 <template>
-  <view class="editPay">
-    <view @click="edit('币币账户')" class="list flex">
+  <view v-if="total.scBanlance" class="editPay">
+    <view v-if="leftName!='币币账户'||type==1" @click="edit('币币账户',total.scBanlance.toFixed(2))" class="list flex">
       <view class="flex">
         <text>币币账户</text>
-        <text>可用0.00124sc</text>
+        <text>可用余额 {{total.scBanlance.toFixed(2)}}</text>
       </view>
-      <uni-icons type="checkmarkempty" color="#524cff" size="30" />
+      <!-- <uni-icons type="checkmarkempty" color="#524cff" size="30" /> -->
     </view>
-    <view @click="edit('法币账户')" class="list flex">
+    <view v-if="leftName=='币币账户'||type==1" @click="edit('法币账户',total.otcAccountBalances.toFixed(2))" class="list flex">
       <view class="flex">
         <text>法币账户</text>
-        <text>可用0.00124sc</text>
+        <text>可用余额 {{total.otcAccountBalances.toFixed(2)}}</text>
       </view>
-      <uni-icons type="checkmarkempty" color="#524cff" size="30" />
+      <!-- <uni-icons type="checkmarkempty" color="#524cff" size="30" /> -->
     </view>
-    <view @click="edit('合约账户')" class="list flex">
+    <view v-if="leftName=='币币账户'||type==1" @click="edit('期权合约账户',total.contractAccountBalances)" class="list flex">
       <view class="flex">
-        <text>合约账户</text>
-        <text>可用0.00124sc</text>
+        <text>期权合约账户</text>
+        <text>可用余额 {{total.contractAccountBalances}}</text>
       </view>
-      <uni-icons type="checkmarkempty" color="#524cff" size="30" />
+      <!-- <uni-icons type="checkmarkempty" color="#524cff" size="30" /> -->
     </view>
   </view>
 </template>
 
 <script>
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
-import * as myAxios from '@/api/otc.js';
+import { propertyList } from '@/api/wallet_api.js';
 import { toast, loading, model, fn } from '@/common/common.js';
 export default {
   name: 'editPay',
   data() {
     return {
-      type: 0
+      total:{},
+      type: 0,
+      leftName: ''
     };
   },
   onLoad(e) {
     this.type = e.type;
+    this.leftName = e.leftName;
   },
-  onShow() {},
+  onShow() {
+    this.propertyList()
+  },
   methods: {
-    edit(name) {
+    propertyList() {
+      loading(1, '加载中');
+      propertyList({ type: 2 }).then(res => {
+        loading(2);
+        if (res.code == 1) {   
+          this.total = res.data.total;
+        }
+      });
+    },
+    edit(name,moeny) {
       var pages = getCurrentPages();
       var page = pages[pages.length - 2];
       // #ifdef APP-PLUS
       if (this.type == 1) {
         page.setData({
-          leftName: name
+          leftName: name,
+          moeny:moeny
         });
       } else {
         page.setData({
@@ -56,6 +71,7 @@ export default {
       // #endif
       //#ifdef H5
       this.type == 1 ? (page._data.leftName = name) : (page._data.rightName = name);
+      if(this.type==1) page._data.money =moeny
       // #endif
       uni.navigateBack();
     }

@@ -4,7 +4,7 @@
     <view v-if="type == 0">
       <view class="row">
         <view class="top"><text>开户人</text></view>
-        <view class="bt"><input type="text" placeholder="请填写开户人姓名" v-model="data.money" /></view>
+        <view class="bt"><input type="text" placeholder="请填写开户人姓名" v-model="data.userName" /></view>
       </view>
       <view class="row">
         <view class="top"><text>银行卡号</text></view>
@@ -18,11 +18,11 @@
     <view v-else>
       <view class="row">
         <view class="top"><text>真实姓名</text></view>
-        <view><input type="text" placeholder="请填写真实姓名" v-model="data.bankAddress" /></view>
+        <view><input type="text" placeholder="请填写真实姓名" v-model="aliData.userName" /></view>
       </view>
       <view class="row">
         <view class="top"><text>支付宝账号</text></view>
-        <view><input type="text" placeholder="请填写支付宝账号" v-model="data.bankAddress" /></view>
+        <view><input type="text" placeholder="请填写支付宝账号" v-model="aliData.account" /></view>
       </view>
     </view>
     <view class="sub" @click="submit">确认</view>
@@ -32,22 +32,45 @@
 <script>
 import { addBank } from '@/api/wallet_api.js';
 import { toast, loading } from '@/common/common.js';
+import * as myAjax from '@/api/receiving.js';
 export default {
   data() {
     return {
+      edit: 0,
+      id: '',
+      aliData: {
+        userName: '',
+        account: ''
+      },
       data: {
-        coinId: '',
+        userName: '',
         address: '',
-        bankAddress: ''
+        bankAddress: '',
+        coinId: ''
       }
     };
   },
   onLoad(e) {
+    this.id = e.id || '';
+    this.edit = e.edit || 0; // 0 添加  1修改
     this.type = e.type || 0;
-    this.data.coinId = e.coinId;
+    this.data.coinId = e.coinId || '';
+    let title = {
+      '10': '添加支付宝',
+      '11': '编辑支付宝',
+      '00': '添加银行卡',
+      '01': '编辑银行卡'
+    };
     uni.setNavigationBarTitle({
-      title: e.type==1?'添加支付宝':'添加银行卡'
+      title: title[`${this.type}${this.edit}`]
     });
+    if (this.edit) loading('1','加载中..')
+    if (this.edit && this.type == 0) {
+      this.getBank();
+    }
+    if(this.edit &&this.type==1){
+      this.getAlis()
+    }
   },
   methods: {
     jump(url) {
@@ -55,14 +78,49 @@ export default {
         url: url
       });
     },
-    submit() {
-      for (let i in this.data) {
-        if (!this.data[i]) {
-          toast({ text: '请填写正确的信息' });
-          return;
+    getAlis(){
+      myAjax.getAli(this.id).then(res => {
+        loading(2);
+        this.aliData.account = res.data.account;
+        this.aliData.userName = res.data.userName;
+      });
+    },
+    addAlis() {
+      let data = this.aliData;
+      if (this.id) data.id = this.id;
+      myAjax.addAli(data).then(res => {
+        if (res.code == 1) {
+          toast({ icon: 'success', text: this.edit ? '编辑成功' : '添加成功' });
+          setTimeout(() => {
+            uni.navigateBack();
+          }, 2000);
+        } else {
+          toast({ text: '添加失败' });
         }
-      }
-      loading(1, '添加中');
+      });
+    },
+    getBank() {
+      myAjax.getbank(this.id).then(res => {
+        loading(2);
+        this.data.bankAddress = res.data.bankAddress;
+        this.data.address = res.data.address;
+        this.data.userName = res.data.userName;
+      });
+    },
+    editBank() {
+      myAjax.editBank(Object.assign({ id: this.id }, this.data)).then(res => {
+        loading(2);
+        if (res.code == 1) {
+          toast({ icon: 'success', text: '编辑成功' });
+          setTimeout(() => {
+            uni.navigateBack();
+          }, 2000);
+        } else {
+          toast({ text: '添加失败' });
+        }
+      });
+    },
+    addBank() {
       addBank(this.data)
         .then(res => {
           loading(2);
@@ -76,7 +134,37 @@ export default {
           }
         })
         .catch(err => {});
-      console.log(this.data);
+    },
+    submit() {
+      if (this.type == 0) {
+        for (let i in this.data) {
+          if (!this.data[i] && i != 'coinId') {
+            toast({ text: '请填写正确的信息' });
+            return;
+          }
+        }
+      } else {
+        for (let i in this.aliData) {
+          if (!this.aliData[i] && i != 'coinId') {
+            toast({ text: '请填写正确的信息' });
+            return;
+          }
+        }
+      }
+      loading(1, '添加中');
+      if (this.edit) {
+        if (this.type == 0) {
+          this.editBank();
+        } else {
+          this.addAlis()
+        }
+      } else {
+        if (this.type == 0) {
+          this.addBank();
+        }else{
+          this.addAlis()
+        }
+      }
     }
   }
 };

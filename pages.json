@@ -402,6 +402,11 @@
         "navigationBarTitleText": "购买SC",
         "navigationStyle": "custom"
       }
+    },{
+      "path": "pages/otc/payList",
+      "style": {
+        "navigationBarTitleText": "银行卡列表"
+      }
     }
   ],
   "globalStyle": {
@@ -428,7 +433,7 @@
       },
       {
         "pagePath": "pages/otc/index",
-        "text": "otc",
+        "text": "OTC",
         "iconPath": "static/images/tabbar/tabbar_3-1.png",
         "selectedIconPath": "static/images/tabbar/tabbar_3-2.png"
       },

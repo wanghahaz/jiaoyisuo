@@ -17,7 +17,7 @@
     <swiper :current="tab_area" class="swiper" @change="swiperTab">
       <swiper-item>
         <view @tap="editTab(1, 0)" class="arae_1">
-          <view class="uni-input"><input class="uni-input" placeholder="请输入数量" type="text" value="" /></view>
+          <view class="uni-input"><input class="uni-input" v-model="fromData.qty" placeholder="请输入数量" type="text" value="" /></view>
           <view class="tip">按数量购买</view>
           <view class="sub_buy" @click="oneKey">{{ sellType == 0 ? '一键购买' : '一键出售' }}</view>
           <view class="service_money">交易手续费0</view>
@@ -27,26 +27,30 @@
         <view @tap="editTab(1, 1)" class="optional">
           <scroll-view scroll-y="true" class="scroll_box" @scrolltolower="scroll">
             <view class="add flex" @click="toRouter('/pages/otc/issue', {})"></view>
-            <view class="item flex" v-for="item in 10" :key="item">
+            <view class="item flex" v-for="item in otcList" :key="item.id">
               <view class="left">
-                <view class="flex"><text>张三</text></view>
+                <view class="flex">
+                  <text>{{ item.userName }}</text>
+                </view>
                 <view>
                   <text>数量</text>
-                  <text>50,60 SC</text>
+                  <text>{{ item.qty }} SC</text>
                 </view>
                 <view>
                   <text>限额</text>
-                  <text>241,52 SC</text>
+                  <text>{{ item.quota || '1' }} SC</text>
                 </view>
               </view>
               <view class="right flex">
                 <view class="flex">
-                  <text>￥{{ (21).toFixed(2) }}</text>
+                  <text>￥{{ item.price.toFixed(2) }}</text>
                   <text>/SC</text>
                 </view>
-                <view @click="toRouter('/pages/otc/buyOtc',{})">去购买</view>
+                <view :class="sellType ? 'darger' : ''" @click.stop="toRouter('/pages/otc/buyOtc', { type: sellType ,id:item.id})">{{ sellType == 0 ? '去购买' : '去出售' }}</view>
               </view>
             </view>
+            <view v-if="loading && otcList.length == 0" class="nomore">加载中....</view>
+            <view v-else class="nomore">{{ loading ? '加载更多...' : '已加载全部...' }}</view>
           </scroll-view>
         </view>
       </swiper-item>
@@ -60,26 +64,30 @@
       <view class="sort_1" v-if="buySort == 1">
         <view class="flex">
           <text>参考单价</text>
-          <text>7.11 CNY/SC</text>
+          <text>{{ fromData.price.toFixed(2) }} CNY/SC</text>
         </view>
         <view class="flex">
           <text>数量</text>
-          <text>10.00SC(1，000.00CNY)</text>
+          <text>{{ fromData.qty }}SC</text>
         </view>
         <view class="flex">
           <text>总金额</text>
-          <text>19.40CNY</text>
+          <text>{{ (fromData.qty * fromData.price).toFixed(2) }}CNY</text>
         </view>
       </view>
-      <checkbox-group  v-else class="sort_2" @change="boxChange">
-        <view class="flex" v-for="item in checkList" :key="item.id">
-            <checkbox style="transform:scale(0.7)" :value="item.id"  />
-            <view class="flex"><image class="check_img" :src="item.src" mode=""></image>  <span>{{ item.name }}</span></view>
+      <checkbox-group v-if="buySort == 2" class="sort_2" @change="boxChange">
+        <view class="flex" v-for="(item, ind) in checkList" :key="item.id">
+          <!-- <checkbox class="checkbox" style="transform:scale(0.6)" :value="item.id" /> -->
+          <view @click="toRouter('/pages/otc/payList', { type: ind })" class="flex list">
+            <view class="flex">
+              <image class="check_img" :src="item.src" mode=""></image>
+              <span>{{ item.name }}</span>
+              <span class="account" v-if="ind == 0 && bank.acount">({{ bank.acount }})</span>
+              <span class="account" v-if="ind == 1 && alis.acount">({{ alis.acount }})</span>
+            </view>
+            <uni-icons type="arrowright" size="24" />
+          </view>
         </view>
-        <!-- <label class="uni-list-cell uni-list-cell-pd" v-for="item in items" :key="item.value">
-          <view></view>
-          <view>{{ item.name }}</view>
-        </label> -->
       </checkbox-group>
       <view class="subs" @click="sbt">{{ buySort == 1 ? '确认' : '下一步' }}</view>
     </view>
@@ -94,30 +102,114 @@ export default {
   name: '',
   data() {
     return {
-      checkList:[{name:'支付宝',id:'1',src:'../../static/images/otc/zfb.png'},{name:'银行卡',id:'2',src:'../../static/images/otc/bank.png'}],
+      pageInfo: {
+        page: 1,
+        pageSize: 10
+      },
+      otcList: [],
+      loading: true,
+      fromData: { qty: '', price: 0, othersideOrderId: '', othersideUserId: '' },
+      checkList: [{ name: '银行卡', id: '2', src: '../../static/images/otc/bank.png' }, { name: '支付宝', id: '1', src: '../../static/images/otc/zfb.png' }],
       maskShow: false,
       buySort: 1, //购买弹框顺序
       tab_area: 0,
-      sellType: 0
+      sellType: 0,
+      bank: {
+        acount: '',
+        id: ''
+      },
+      alis: {
+        acount: '',
+        id: ''
+      }
     };
   },
   onLoad(e) {},
-  onShow() {},
+  onShow() {
+    if (this.tab_area) {
+      this.loading = true;
+      this.otcList = [];
+      this.pageInfo.page = 1;
+      this.getList();
+    }
+  },
   methods: {
+    getList() {
+      loading('1', '加载中...');
+      myAxios
+        .otcList({ pageNum: this.pageInfo.page, pageSize: this.pageInfo.pageSize, type: this.sellType == 0 ? 2 : 1 })
+        .then(res => {
+          loading(2);
+          if (res.code == 1) {
+            this.otcList = [...this.otcList, ...res.data.list];
+            if (this.otcList.length >= res.data.total) {
+              this.loading = false;
+            }
+          }
+          // console.log(res);
+        })
+        .catch(err => {});
+    },
     show_() {
       this.maskShow = !this.maskShow;
     },
     // 购买
-    sbt() {
-      if (this.buySort == 1) this.buySort = 2;
+    async sbt() {
+      loading(1, '加载中');
+      let res = null;
+      if (this.sellType == 0) {
+        res = await myAxios.addOrder(Object.assign(this.fromData, { type: this.sellType == 0 ? 1 : 2 }));
+        if (res.code == 1) {
+          toast({text:'操作成功'})
+          setTimeout(() => {
+            this.toRouter('/pages/otc/orderContent', { id: res.data, type: 1, status: 1 });
+          }, 1500);
+        } else {
+          toast({ text: res.msg || '网络加载失败..' });
+        }
+      }
+      if (this.sellType == 1) {
+        if (this.buySort == 2) {
+          if (!this.bank.id && !this.alis.id) {
+            toast({ text: '请您至少添加一种收款方式' });
+          } else {
+            res = await myAxios.addOrder(Object.assign(this.fromData, { bankId: this.bank.id, aliId: this.alis.id, type: this.sellType == 0 ? 1 : 2 }));
+            if (res.code == 1) {
+              toast({text:'操作成功'})
+              setTimeout(() => {
+                this.toRouter('/pages/otc/orderContent', { id: res.data, type: 1, status: 1 });
+              }, 1500);
+            } else {
+              toast({ text: res.msg || '网络加载失败..' });
+            }
+          }
+        }
+        if (this.buySort == 1) this.buySort = 2;
+      }
+      loading(2);
     },
-    boxChange(e){
-      console.log(e.detail.value)
+    boxChange(e) {
+      console.log(e.detail.value);
     },
     // 一键操作
-    oneKey() {
-      this.buySort = 1;
-      this.show_();
+    async oneKey() {
+      if (isNaN(this.fromData.qty) || this.fromData.qty == '') {
+        toast({ text: '请输入正确的格式' });
+        return false;
+      }
+      loading(1, '加载中...');
+      let res = await myAxios.referencePrice(this.sellType == 0 ? 1 : 2, this.fromData.qty);
+      loading(2);
+      console.log(res);
+      if (res.code == 1) {
+        this.fromData.price = res.data.price;
+        this.fromData.othersideUserId = res.data.userId;
+        this.fromData.othersideOrderId = res.data.id;
+        this.buySort = 1;
+        this.show_();
+      } else {
+        toast({ text: res.msg || '暂符合需求的交易单~' });
+      }
     },
     toRouter(url, data) {
       uni.navigateTo({
@@ -128,7 +220,10 @@ export default {
       this.tab_area = e.detail.current;
     },
     scroll() {
-      console.log(1);
+      if (this.loading) {
+        this.pageInfo.page = this.pageInfo.page + 1;
+        this.getList();
+      }
     },
     editTab(type, ind) {
       // type 1 选区  2买卖
@@ -136,11 +231,18 @@ export default {
       if (type == 1) {
         if (ind != this.tab_area) {
           this.tab_area = ind;
+          this.sellType = 0;
         }
       } else {
         if (ind != this.sellType) {
           this.sellType = ind;
         }
+      }
+      if (this.tab_area == 1) {
+        this.loading = true;
+        this.otcList = [];
+        this.pageInfo.page = 1;
+        this.getList();
       }
     }
   },
@@ -188,21 +290,33 @@ $bg: #534dff;
         }
       }
     }
-    .sort_2{
+    .sort_2 {
       padding: 0 4%;
-      >view{
+      .checkbox {
+        margin-top: 1px;
+      }
+      > view {
+        font-size: 34upx;
         margin-bottom: 20upx;
         align-items: center;
-        >view{
+        .list,
+        .list > view {
           align-items: center;
-          justify-content: flex-start;
         }
       }
-       .check_img{
-         width:40upx;
-         height: 40upx;
-         margin-right: 10upx;
-       }
+      .account {
+        margin-left: 10upx;
+        font-size: 30upx;
+      }
+      .list {
+        flex: 1;
+        justify-content: space-between;
+      }
+      .check_img {
+        width: 40upx;
+        height: 40upx;
+        margin: 2px 10upx 0 0;
+      }
     }
     .subs {
       background-color: $bg;
@@ -236,7 +350,7 @@ $bg: #534dff;
       height: 100%;
       .add {
         position: fixed;
-        right: 4%;
+        right: 5%;
         bottom: 100upx;
         width: 70upx;
         height: 70upx;

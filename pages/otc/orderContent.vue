@@ -36,10 +36,11 @@
     <view class="deal_centent buy_deal" v-if="type == 1 && status == 2">
       <view class="flex">
         <view>
-          <text class="iconfont iconumidd17 icons"></text>
-          <text>支付宝</text>
+          <image class="icon_pay" v-if="pay_type==1" src="../../static/images/otc/zfb.png" mode=""></image>
+          <image class="icon_pay" v-else src="../../static/images/otc/bank.png" mode=""></image>
+          <text>{{pay_type==1?'支付宝':'银行卡'}}</text>
         </view>
-        <view>
+        <view @click="payStatus">
           <text>切换支付方式</text>
           <uni-icons color="#999" class="icons" type="arrowright" size="14" />
         </view>
@@ -49,11 +50,11 @@
         <text>张三</text>
       </view>
       <view class="icon_copy">
-        <text>收款卡号</text>
+        <text>{{pay_type==1?'支付宝账号':'收款卡号'}}</text>
         <text>3256 8564 2458 6412</text>
         <text @click="copy('3256 8564 2458 6412')" class="iconfont iconfuzhi"></text>
       </view>
-      <view>
+      <view v-if="pay_type==2">
         <text>银行信息</text>
         <text>中信银行</text>
       </view>
@@ -133,8 +134,29 @@
         <text>kyc3</text>
       </view>
     </view>
-
     <view v-if="status == 1" @click="toRouter('', {})" class="toMoney">划转资产</view>
+    <!-- 切换支付方式 -->
+    <view v-if="pay_show" @click="payStatus" class="mask"></view>
+    <view :class="pay_show ? 'mask_content' : ''" class="pay_box">
+      <view class="pay_title">支付方式</view>
+      <view>
+        <view @click="editPay(1)" class="pay_list">
+          <view>
+            <image src="../../static/images/otc/zfb.png" mode=""></image>
+            <text>支付宝</text>
+          </view>
+          <uni-icons v-if="pay_type == 1" class="icon_uni" color="#534dff" size="28" type="checkmarkempty" />
+        </view>
+        <view  @click="editPay(2)" class="pay_list">
+          <view>
+            <image src="../../static/images/otc/bank.png" mode=""></image>
+            <text>银行卡</text>
+          </view>
+          <uni-icons v-if="pay_type == 2" class="icon_uni" color="#534dff" size="28" type="checkmarkempty" />
+        </view>
+      </view>
+    </view>
+    <!-- subs 按钮 -->
     <view v-if="status == 2 && type == 0" class="sell_sub subs"><text @click="sell_subs" class="blue">确认收款</text></view>
     <view v-if="status == 2 && type == 1" class="buy_sub subs">
       <text @click="buy_subs(0)">取消订单</text>
@@ -151,7 +173,9 @@ export default {
   name: '',
   data() {
     return {
-      type: 0,
+      pay_show: false,
+      pay_type: 1, //1 zfb  2 bank
+      type: 0, // 0. sell 1. buy
       status: 0 //0 :取消  1：完成 2：进行中
     };
   },
@@ -162,8 +186,15 @@ export default {
   },
   onShow() {},
   methods: {
+    editPay(type){
+      this.pay_type=type
+      this.payStatus()
+    },
+    payStatus() {
+      this.pay_show = !this.pay_show;
+    },
     copy(e) {
-      console.log(e)
+      console.log(e);
       uni.setClipboardData({
         data: e,
         success: function() {
@@ -181,7 +212,7 @@ export default {
         url: url + fn.params(data)
       });
     },
-    buy_subs(type) {
+    async buy_subs(type) {
       let obj = {};
       type == 0 ? (obj = { title: '取消订单', text: '您确认取消订单么？' }) : (obj = { title: '确认付款' });
       model(obj).then(res => {
@@ -209,6 +240,45 @@ export default {
   /* #ifdef APP-PLUS */
   padding-top: var(--status-bar-height);
   /* #endif */
+  .pay_box {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    background: #fff;
+    width: 100%;
+    z-index: 100;
+    padding-bottom: 80upx;
+    box-sizing: border-box;
+    transform: translateY(100%);
+    transition: all 0.4s;
+    > view {
+      padding: 0 5%;
+    }
+    .pay_title {
+      text-align: center;
+      line-height: 100upx;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .pay_list {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      > view {
+        margin-top: 40upx;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .icon_uni {
+        margin-top: 12px;
+      }
+    }
+    image {
+      margin-right: 5px;
+      width: 46upx;
+      height: 46upx;
+    }
+  }
   .deal_warn {
     width: 92%;
     margin: 0 4%;
@@ -288,6 +358,11 @@ export default {
     top: -10px;
   }
   .buy_deal {
+    .icon_pay{
+      width: 40upx;
+      height: 40upx;
+      margin-right: 4px;
+    }
     > view:nth-of-type(1) {
       align-items: center;
       border-bottom: 1px solid #f5f5f5;
@@ -363,7 +438,7 @@ export default {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 170upx;
+    height: 160upx;
     display: flex;
     box-sizing: border-box;
     background: #fff;
