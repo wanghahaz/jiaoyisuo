@@ -13,7 +13,7 @@
         /* 5+App特有相关 */
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
-            "waiting" : true,
+            "waiting" : false,
             "autoclose" : true,
             "delay" : 0
         },
@@ -50,36 +50,36 @@
             },
             "icons" : {
                 "ios" : {
-                    "appstore" : "static/appImg/icon.png",
+                    "appstore" : "unpackage/res/icons/1024x1024.png",
                     "ipad" : {
-                        "app" : "static/appImg/icon.png",
-                        "app@2x" : "static/appImg/icon.png",
-                        "notification" : "static/appImg/icon.png",
-                        "notification@2x" : "static/appImg/icon.png",
-                        "proapp@2x" : "static/appImg/icon.png",
-                        "settings" : "static/appImg/icon.png",
-                        "settings@2x" : "static/appImg/icon.png",
-                        "spotlight" : "static/appImg/icon.png",
-                        "spotlight@2x" : "static/appImg/icon.png"
+                        "app" : "unpackage/res/icons/76x76.png",
+                        "app@2x" : "unpackage/res/icons/152x152.png",
+                        "notification" : "unpackage/res/icons/20x20.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "proapp@2x" : "unpackage/res/icons/167x167.png",
+                        "settings" : "unpackage/res/icons/29x29.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "spotlight" : "unpackage/res/icons/40x40.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png"
                     },
                     "iphone" : {
-                        "app@2x" : "static/appImg/icon.png",
-                        "app@3x" : "static/appImg/icon.png",
-                        "notification@2x" : "static/appImg/icon.png",
-                        "notification@3x" : "static/appImg/icon.png",
-                        "settings@2x" : "static/appImg/icon.png",
-                        "settings@3x" : "static/appImg/icon.png",
-                        "spotlight@2x" : "static/appImg/icon.png",
-                        "spotlight@3x" : "static/appImg/icon.png"
+                        "app@2x" : "unpackage/res/icons/120x120.png",
+                        "app@3x" : "unpackage/res/icons/180x180.png",
+                        "notification@2x" : "unpackage/res/icons/40x40.png",
+                        "notification@3x" : "unpackage/res/icons/60x60.png",
+                        "settings@2x" : "unpackage/res/icons/58x58.png",
+                        "settings@3x" : "unpackage/res/icons/87x87.png",
+                        "spotlight@2x" : "unpackage/res/icons/80x80.png",
+                        "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
                 },
                 "android" : {
-                    "hdpi" : "static/appImg/icon.png",
+                    "hdpi" : "unpackage/res/icons/72x72.png",
                     "ldpi" : "unpackage/res/icons/48x48.png",
                     "mdpi" : "unpackage/res/icons/48x48.png",
-                    "xhdpi" : "static/appImg/icon.png",
-                    "xxhdpi" : "static/appImg/icon.png",
-                    "xxxhdpi" : "static/appImg/icon.png"
+                    "xhdpi" : "unpackage/res/icons/96x96.png",
+                    "xxhdpi" : "unpackage/res/icons/144x144.png",
+                    "xxxhdpi" : "unpackage/res/icons/192x192.png"
                 }
             },
             "splashscreen" : {
@@ -117,8 +117,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    /*"target" : "http://39.98.79.218:8080/oax-web-1.0",*/
-                    "target" : "http://192.168.1.40:8080",
+                    "target" : "http://39.98.79.218:8080/oax-web-1.0",
+                    /*"target" : "http://192.168.1.40:8080",*/
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {

@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view class="tips">此版本为测试版本，不支持任何虚拟资产交易。</view>
+		<!-- <view class="tips">此版本为测试版本，不支持任何虚拟资产交易。</view> -->
 		<view class="userInfo">
 			<view class="info pd30 bb" @click="jump('myInfo')">
 				<view>
@@ -202,6 +202,7 @@
 		line-height: 50upx;
 	}
 	.userInfo {
+    margin-top: 1px;
 		background: #fff;
 		.info {
 			display: flex;
