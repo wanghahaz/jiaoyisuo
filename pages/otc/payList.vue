@@ -7,14 +7,14 @@
       </view>
       <view class="del" @click="del(item.id)">删除</view>
     </view>
-    <view v-else class="cardBox" v-for="(item, index) in cardlist" :key="index">
+    <view v-if="type == 1" class="cardBox" v-for="(item, index) in cardlist" :key="index">
       <view class="left" @click="black(index)">
         <text>支付宝账号: {{ item.account }}</text>
         <text>用户名: {{ item.userName }}</text>
       </view>
       <!-- <view class="del" @click="del(item.id)">删除</view> -->
     </view>
-    <view v-if="(type == 0 &&loading)|| (type == 1 &&loading&& this.cardlist.length == 0)" class="addBank" @click="jump('/pages/wallet/addBank', { type: type })">
+    <view v-if="(type == 0 && loading) || (type == 1 && loading && this.cardlist.length == 0)" class="addBank" @click="jump('/pages/wallet/addBank', { type: type })">
       + {{ type == 0 ? '添加银行卡' : '添加支付宝账号' }}
     </view>
   </view>
@@ -75,14 +75,33 @@ export default {
     black(index) {
       let obj = this.cardlist[index];
       let that = this;
-      // console.log(obj);
       var pages = getCurrentPages();
       var page = pages[pages.length - 2];
-      // // #ifdef APP-PLUS
-      // let msg = { address: obj.address, bankAdress: obj.bankAddress };
-      // page.setData({
-      //   bankObj: msg
-      // });
+      // #ifdef APP-PLUS
+      if (this.type == 0) {
+        page.$vm.bank = {
+          acount: '****' + obj.address.slice(obj.address.length - 6),
+          id: obj.id
+        };
+        // page.setData({
+        //   bank:{
+        // acount:'****' + obj.address.slice(obj.address.length - 6),
+        // id:obj.id
+        //   }
+        // });
+      } else {
+        page.$vm.alis = {
+          acount: '****' + obj.account.slice(obj.account.length - 4),
+          id: obj.id
+        };
+        // page.setData({
+        // alis: {
+        //   acount:'****' + obj.account.slice(obj.account.length - 4),
+        //   id:obj.id
+        // }
+        // });
+      }
+
       // // #endif
       //#ifdef H5
       if (this.type == 0) {

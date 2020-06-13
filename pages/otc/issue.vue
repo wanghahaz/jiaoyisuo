@@ -157,7 +157,7 @@ export default {
         toast({ text: '请输入正确的格式' });
         return false;
       }
-      if(this.content.qty<this.content.quota){
+      if(Number(this.content.qty)<Number(this.content.quota)){
         toast({ text: '限额数量必须小于交易数量' });
         return false;
       }

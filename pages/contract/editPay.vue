@@ -7,9 +7,9 @@
       </view>
       <!-- <uni-icons type="checkmarkempty" color="#524cff" size="30" /> -->
     </view>
-    <view v-if="leftName=='币币账户'||type==1" @click="edit('法币账户',total.otcAccountBalances.toFixed(2))" class="list flex">
+    <view v-if="leftName=='币币账户'||type==1" @click="edit('OTC账户',total.otcAccountBalances.toFixed(2))" class="list flex">
       <view class="flex">
-        <text>法币账户</text>
+        <text>OTC账户</text>
         <text>可用余额 {{total.otcAccountBalances.toFixed(2)}}</text>
       </view>
       <!-- <uni-icons type="checkmarkempty" color="#524cff" size="30" /> -->
@@ -59,14 +59,18 @@ export default {
       var page = pages[pages.length - 2];
       // #ifdef APP-PLUS
       if (this.type == 1) {
-        page.setData({
-          leftName: name,
-          moeny:moeny
-        });
+        page.$vm.leftName =name;
+        page.$vm.moeny =moeny;
+        // page.setData({
+        //   leftName: name,
+        //   moeny:moeny
+        // });
       } else {
-        page.setData({
-          rightName: name
-        });
+        page.$vm.rightName =name;
+        // page.$vm.moeny =moeny;
+        // page.setData({
+        //   rightName: name
+        // });
       }
       // #endif
       //#ifdef H5

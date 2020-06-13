@@ -117,8 +117,8 @@
             "disableHostCheck" : true,
             "proxy" : {
                 "/api" : {
-                    /*"target" : "http://39.98.79.218:8080/oax-web-1.0",*/
-                    "target" : "http://192.168.1.40:8080",
+                    "target" : "http://39.98.79.218:8080/oax-web-1.0",
+                  /* "target" : "http://192.168.1.40:8080",*/
                     "changeOrigin" : true,
                     "secure" : false,
                     "pathRewrite" : {

@@ -52,9 +52,10 @@ export default {
       var page = pages[pages.length - 2];
       // #ifdef APP-PLUS
       let msg={'address': obj.address,'bankAdress':obj.bankAddress}
-      page.setData({
-        'bankObj':msg,
-      });
+       page.$vm.bankObj =msg
+      // page.setData({
+      //   'bankObj':msg,
+      // });
       // #endif
       //#ifdef H5
       page._data.bankObj.address = obj.address;

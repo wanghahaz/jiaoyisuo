@@ -1,62 +1,75 @@
 <template>
-  <view :class="status == 2 ? 'pt' : ''" class="orderContent">
+  <view :class="status == 0 ? 'pt' : ''" class="orderContent">
     <view class="status_app"></view>
     <view class="header flex">
       <uni-icons @click="back_" color="#fff" class="icons" type="arrowleft" size="26" />
       <text class="header_name">{{ type == 0 ? '出售SC' : '购买SC' }}</text>
     </view>
     <!-- header -->
-    <view class="status_header">
-      <view v-if="status == 0" class="">
+    <view v-if="content" class="status_header">
+      <view v-if="status == 3 || status == '-1'" class="">
         <view>买家取消</view>
-        <view>您已取消订单</view>
+        <view>已取消订单</view>
       </view>
-      <view v-if="status == 1" class="">
+      <view v-if="status == 2 && type_order != 'order'" class="">
         <view>交易完成</view>
-        <view>资产已划转至您的账户</view>
+        <view>资产已划转至{{ type == 0 ? '对方' : '您' }}的账户</view>
       </view>
-      <view v-if="status == 2 && type == 1" class="pending">
-        <view>￥72.00</view>
-        <view>
+      <view v-if="status == 0 && type == 1 && type_order != 'order'" class="pending">
+        <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
+        <view v-if="s">
           <text>请在</text>
-          7``20
+          {{ s.minutes }}m {{ s.seconds }}s
           <text>内付款给商家</text>
         </view>
       </view>
-      <view v-if="status == 2 && type == 0" class="pending">
-        <view>￥72.00</view>
+      <view v-if="status == 1 && type == 1 && type_order != 'order'" class="pending">
+        <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
+        <view><text>已付款，等待卖家放币</text></view>
+      </view>
+      <view v-if="type_order == 'order'" class="pending">
+        <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
+        <!-- <view><text>已付款，等待卖家放币</text></view> -->
+      </view>
+      <view v-if="status == 0 && type == 0" class="pending">
+        <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
         <view>
-          <text>预计</text>
-          7``20
-          <text>超时自动取消</text>
+          <text>等待买家付款</text>
+          <!-- <text>预计</text>
+           {{s.minutes}}``{{s.seconds}}
+          <text>超时自动取消</text> -->
         </view>
+      </view>
+      <view v-if="status == 1 && type == 0" class="pending">
+        <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
+        <view><text>买家已付款，请放币</text></view>
       </view>
     </view>
     <!-- 购买 -->
-    <view class="deal_centent buy_deal" v-if="type == 1 && status == 2">
+    <view class="deal_centent buy_deal" v-if="type == 1 && status == 0 && content">
       <view class="flex">
         <view>
-          <image class="icon_pay" v-if="pay_type==1" src="../../static/images/otc/zfb.png" mode=""></image>
+          <image class="icon_pay" v-if="pay_type == 1" src="../../static/images/otc/zfb.png" mode=""></image>
           <image class="icon_pay" v-else src="../../static/images/otc/bank.png" mode=""></image>
-          <text>{{pay_type==1?'支付宝':'银行卡'}}</text>
+          <text>{{ pay_type == 1 ? '支付宝' : '银行卡' }}</text>
         </view>
-        <view @click="payStatus">
+        <view v-if="content.aliAddressInfo && content.withdrawAddressInfo" @click="payStatus">
           <text>切换支付方式</text>
           <uni-icons color="#999" class="icons" type="arrowright" size="14" />
         </view>
       </view>
-      <view>
+      <view v-if="content.aliAddressInfo || content.withdrawAddressInfo">
         <text>收款姓名</text>
-        <text>张三</text>
+        <text>{{ pay_type == 1 ? content.aliAddressInfo.userName : content.withdrawAddressInfo.userName }}</text>
       </view>
-      <view class="icon_copy">
-        <text>{{pay_type==1?'支付宝账号':'收款卡号'}}</text>
-        <text>3256 8564 2458 6412</text>
-        <text @click="copy('3256 8564 2458 6412')" class="iconfont iconfuzhi"></text>
+      <view v-if="content.aliAddressInfo || content.withdrawAddressInfo" class="icon_copy">
+        <text>{{ pay_type == 1 ? '支付宝账号' : '收款卡号' }}</text>
+        <text>{{ pay_type == 1 ? content.aliAddressInfo.account : content.withdrawAddressInfo.address }}</text>
+        <text @click="copy(pay_type == 1 ? content.aliAddressInfo.account : content.withdrawAddressInfo.address)" class="iconfont iconfuzhi"></text>
       </view>
-      <view v-if="pay_type==2">
+      <view v-if="pay_type == 2">
         <text>银行信息</text>
-        <text>中信银行</text>
+        <text>{{ content.withdrawAddressInfo.bankAddress }}</text>
       </view>
       <view class="deal_tip">
         若要购买其他数字货币，请将
@@ -67,29 +80,29 @@
       </view>
     </view>
     <!-- 交易详情 -->
-    <view class="deal_centent" v-if="status == 0 || status == 1 || type == 0">
+    <view class="deal_centent" v-if="(status == 3 || status == '-1' || status == 2 || status == 1 || type == 0) && content">
       <view>
         <text>交易总额</text>
-        <text>￥100.00</text>
+        <text>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</text>
       </view>
       <view>
         <text>交易数量</text>
-        <text>2.15SC</text>
+        <text>{{ content.otcOrdersDetailsInfo.qty }}SC</text>
       </view>
       <view>
         <text>交易单价</text>
-        <text>￥200</text>
+        <text>￥{{ content.otcOrdersDetailsInfo.price.toFixed(2) }}</text>
       </view>
       <view>
         <text>交易时间</text>
-        <text>2020-05-14 12:00:00</text>
+        <text>{{ toTime(content.otcOrdersDetailsInfo.createTime) }}</text>
       </view>
-      <view class="icon_copy">
+      <!--  <view class="icon_copy">
         <text>订单编号</text>
         <text>154654651564</text>
         <text @click="copy('123415456')" class="iconfont iconfuzhi"></text>
-      </view>
-      <view v-if="status == 1 || type == 0" class="deal_tip">
+      </view> -->
+      <view v-if="status == 3 || status == '-1' || status == 1 || type == 0" class="deal_tip">
         若要购买其他数字货币，请将
         <text>账户</text>
         资产划转至
@@ -97,7 +110,7 @@
         ，之后即可进行交易
       </view>
     </view>
-    <view v-if="status == 2" :class="type == 0 ? 'top_top' : ''" class="deal_warn">
+    <view v-if="(status == 0 || status == 1) && content && type_order != 'order'" :class="type == 0 ? 'top_top' : ''" class="deal_warn">
       <view>交易提醒</view>
       <view>
         <text class="darger">请勿备注任何信息</text>
@@ -111,9 +124,9 @@
       <view>请确保付款卡所属人与平台实名信息一致，若不一致致卖家有权不放币。请不要使用支付宝转银行卡等到账时间较长的付款方式。</view>
     </view>
     <!-- 交易明细 -->
-    <view v-if="status == 1 || status == 2" class="deal_centent deal_detail">
+    <!--  <view v-if="status == 1" class="deal_centent deal_detail">
       <view><text>交易明细</text></view>
-      <view>
+     <view>
         <text>支付方式</text>
         <text>支付宝（186 3578 4592）</text>
       </view>
@@ -133,8 +146,9 @@
         <text>{{ type == 0 ? '买家' : '卖家' }}昵称</text>
         <text>kyc3</text>
       </view>
-    </view>
-    <view v-if="status == 1" @click="toRouter('', {})" class="toMoney">划转资产</view>
+    </view> -->
+    <!-- @click="toRouter('/pages/contract/moneyMove', { coidId: total.coidId, qty: total.scBanlance })" -->
+    <view v-if="status == 2 && content" @click="toRouter('/pages/contract/moneyMove', { coidId: 1, qty: 0 })" class="toMoney">划转资产</view>
     <!-- 切换支付方式 -->
     <view v-if="pay_show" @click="payStatus" class="mask"></view>
     <view :class="pay_show ? 'mask_content' : ''" class="pay_box">
@@ -147,7 +161,7 @@
           </view>
           <uni-icons v-if="pay_type == 1" class="icon_uni" color="#534dff" size="28" type="checkmarkempty" />
         </view>
-        <view  @click="editPay(2)" class="pay_list">
+        <view @click="editPay(2)" class="pay_list">
           <view>
             <image src="../../static/images/otc/bank.png" mode=""></image>
             <text>银行卡</text>
@@ -157,8 +171,8 @@
       </view>
     </view>
     <!-- subs 按钮 -->
-    <view v-if="status == 2 && type == 0" class="sell_sub subs"><text @click="sell_subs" class="blue">确认收款</text></view>
-    <view v-if="status == 2 && type == 1" class="buy_sub subs">
+    <view v-if="status == 1 && type == 0 && content && type_order != 'order'" class="sell_sub subs"><text @click="sell_subs" class="blue">确认收款</text></view>
+    <view v-if="status == 0 && type == 1 && content" class="buy_sub subs">
       <text @click="buy_subs(0)">取消订单</text>
       <text @click="buy_subs(1)" class="blue">已付款,请放币</text>
     </view>
@@ -169,26 +183,71 @@
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import * as myAxios from '@/api/otc.js';
 import { toast, loading, model, fn } from '@/common/common.js';
+import { timestampToTime, diffTime } from '@/common/timestampToTime.js';
+let timers = null;
 export default {
   name: '',
   data() {
     return {
+      s: null,
+      type_order: '',
+      content: null,
       pay_show: false,
       pay_type: 1, //1 zfb  2 bank
       type: 0, // 0. sell 1. buy
-      status: 0 //0 :取消  1：完成 2：进行中
+      status: 0 //0 :取消   1：完成 2：进行中 ( 0 :进行中  1：进行中 2：已完成  3.已取消)
     };
   },
   onLoad(e) {
+    this.id = e.id;
     this.type = e.type;
-    this.status = e.status;
+    this.type_order = e.type_order;
+    // this.status = e.status;
     console.log(e);
+    this.get_order(e.type_order);
+  },
+  onUnload: function() {
+    if (timers) {
+      clearInterval(timers);
+      timers = null;
+    }
+  },
+  onHide() {
+    if (timers) {
+      clearInterval(timers);
+      timers = null;
+    }
   },
   onShow() {},
   methods: {
-    editPay(type){
-      this.pay_type=type
-      this.payStatus()
+    get_order(types) {
+      let type = types == 'trade' ? 'tradeId' : 'orderId';
+      let data = {};
+      data[type] = this.id;
+      data.type = this.type;
+      loading(1, '加载中...');
+      myAxios.getOrder(data).then(res => {
+        loading(2);
+        console.log(res);
+        this.status = res.data.otcOrdersDetailsInfo.status;
+        this.content = res.data;
+        this.pay_type = res.data.aliAddressInfo ? 1 : 2;
+        if (this.status == 0 && res.data.otcOrdersDetailsInfo.cancelTime && new Date().getTime() < res.data.otcOrdersDetailsInfo.cancelTime) {
+          timers = setInterval(() => {
+            let time = new Date().getTime();
+            this.s = diffTime(time, res.data.otcOrdersDetailsInfo.cancelTime);
+            console.log(this.s);
+            if (this.s.seconds == '00' && this.s.minutes == '00') {
+              clearInterval(timers);
+              this.get_order(this.type_order);
+            }
+          }, 1000);
+        }
+      });
+    },
+    editPay(type) {
+      this.pay_type = type;
+      this.payStatus();
     },
     payStatus() {
       this.pay_show = !this.pay_show;
@@ -216,16 +275,60 @@ export default {
       let obj = {};
       type == 0 ? (obj = { title: '取消订单', text: '您确认取消订单么？' }) : (obj = { title: '确认付款' });
       model(obj).then(res => {
-        console.log(res);
+        if (res) {
+          if (type == 0) {
+            myAxios.editOrder({ status: '-1', tradeId: this.id }).then(r => {
+              console.log(r);
+              if (r.code == 1) {
+                toast({ text: '操作成功' });
+                setTimeout(() => {
+                  this.get_order(this.type_order);
+                }, 1500);
+              } else {
+                toast({ text: r.msg || '操作失败' });
+              }
+            });
+          } else {
+            myAxios.editOrder({ status: '1', tradeId: this.id }).then(r => {
+              console.log(r);
+              if (r.code == 1) {
+                toast({ text: '操作成功' });
+                setTimeout(() => {
+                  this.get_order(this.type_order);
+                }, 1500);
+              } else {
+                toast({ text: r.msg || '操作失败' });
+              }
+            });
+          }
+        }
       });
     },
     sell_subs() {
       model({ title: '确认收款', text: '', stext: '确认收款' }).then(res => {
-        console.log(res);
+        if (res) {
+          myAxios.editOrder({ status: '2', tradeId: this.id }).then(r => {
+            console.log(r);
+            if (r.code == 1) {
+              toast({ text: '操作成功' });
+              setTimeout(() => {
+                this.get_order(this.type_order);
+              }, 1500);
+            } else {
+              toast({ text: r.msg || '操作失败' });
+            }
+          });
+        }
       });
     }
   },
-  computed: {},
+  computed: {
+    toTime() {
+      return function(time) {
+        return timestampToTime(time, 'dateTime');
+      };
+    }
+  },
   components: {
     uniIcons
   }
@@ -358,7 +461,7 @@ export default {
     top: -10px;
   }
   .buy_deal {
-    .icon_pay{
+    .icon_pay {
       width: 40upx;
       height: 40upx;
       margin-right: 4px;

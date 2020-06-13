@@ -50,7 +50,7 @@
       </view>
       <view class="no_bt">
         <text>放币时效</text>
-        <text>0`30</text>
+        <text>30m 00s</text>
       </view>
     </view>
     <view :class="from.qty && sums ? 'subs_active' : ''" class="subs" v-if="buy_pay == 0" @click="sub">购买</view>
@@ -67,7 +67,7 @@ export default {
   name: 'buyOtc',
   data() {
     return {
-      s: 60,
+      s: 120,
       id: '',
       order: null,
       buy_pay: 0, //1 购买 0 出售
@@ -84,17 +84,22 @@ export default {
       }
     };
   },
+  onUnload(){
+    if (timers) {
+      clearInterval(timers);
+    }
+  },
   onLoad(e) {
     this.buy_pay = e.type;
     this.id = e.id;
     this.getOrder();
-    // timers=setInterval(()=>{
-    //     this.s--;
-    //     if(this.s==0){
-    //       clearInterval(timers)
-    //       this.back_()
-    //     }
-    // },1000)
+    timers=setInterval(()=>{
+        this.s--;
+        if(this.s==0){
+          clearInterval(timers)
+          this.back_()
+        }
+    },1000)
   },
   onHide() {
     if (timers) {
@@ -139,7 +144,7 @@ export default {
       if(res.code ==1){
         toast({text:'操作成功'})
         setTimeout(()=>{
-           this.toRouter('/pages/otc/orderContent', { id: res.data, type: 1, status: 1 });
+           this.toRouter('/pages/otc/orderContent', { id: res.data, type: this.buy_pay==0?1:0,  type_order: 'trade', });
         },1500)
       }else{
         toast({text:res.msg||'操作失败'})

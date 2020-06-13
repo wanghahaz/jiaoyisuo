@@ -7,32 +7,39 @@
       <text :class="tab_index == 3 ? 'tabActive' : ''" @click="tab(3)">已取消</text>
     </view>
     <scroll-view scroll-y="true" class="scroll_box" @scrolltolower="scroll">
-      <view class="item" v-for="item in 10" :key="item"  @click="toRouter('/pages/otc/orderContent',{type:item % 2,status:item % 3})">
+      <view
+        class="item"
+        v-for="(item,ind) in list"
+        :key="ind"
+        @click="toRouter('/pages/otc/orderContent', { type_order: item.orderType, id: item.id, type: item.type == 1 ? '1' : '0' })"
+      >
         <view class="top flex">
           <view class="left">
             <view class="flex">
               <view class="name flex">
-                <text class="icon" :class="item % 2 == 0 ? 'sell' : 'buy'">{{ item % 2 == 0 ? '卖出' : '买入' }}</text>
-                <text>SC/SNY</text>
+                <text class="icon" :class="item.type == 2 ? 'sell' : 'buy'">{{ item.type == 2 ? '卖出' : '买入' }}</text>
+                <text>SC/CNY</text>
               </view>
-              <text class="creattime">2020-05-20</text>
+              <text class="creattime">{{ item.time }}</text>
             </view>
             <view>
               <view>
                 <text>价格</text>
-                <text>75.01</text>
+                <text>{{ item.price.toFixed(2) }}</text>
               </view>
               <view>
                 <text>数量</text>
-                <text>1.20</text>
+                <text>{{ item.qty }}</text>
               </view>
             </view>
           </view>
           <view class="right">
-            <text>等待对方放币</text>
+            <text v-if="item.orderType == 'order'"></text>
+            <text v-if="item.type == 1 && item.orderType == 'trade'">{{ item.status == 0 ? '待付款' :item.status == 1? '等待卖方发币':item.status == 2?'已完成':'已取消' }}</text>
+            <text v-if="item.type == 2 && item.orderType == 'trade'">{{ item.status == 0 ? '等待买方付款' :item.status == 1? '待发币':item.status == 2?'已完成':'已取消' }}</text>
             <view class="flex">
               <view class="flex">
-                <text>10.14</text>
+                <text>{{ (item.qty * item.price).toFixed(2) }}</text>
                 <text>SC</text>
               </view>
               <text class="text_right">总金额</text>
@@ -40,10 +47,13 @@
           </view>
         </view>
         <view class="btm flex">
-          <text>{{ tab_status[item % 3] }}</text>
-          <text>16:20</text>
+          <text>{{ tab_status[item.status] }}</text>
+          <!-- <text>16:20</text> -->
         </view>
       </view>
+      <view v-if="loading && list.length == 0" class="nomore">加载中....</view>
+      <view v-else-if="!loading && list.length == 0" class="nomore">您还没有订单</view>
+      <view v-else class="nomore">{{ loading ? '加载更多...' : '已加载全部' }}</view>
     </scroll-view>
   </view>
 </template>
@@ -52,32 +62,70 @@
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import * as myAxios from '@/api/otc.js';
 import { toast, loading, model, fn } from '@/common/common.js';
+import { timestampToTime,diffTime } from '@/common/timestampToTime.js';
 export default {
   name: '',
   data() {
     return {
+      loading: true,
       tab_index: 0,
+      list: [],
+      page: {
+        pageNum: 1,
+        pageSize: 10
+      },
       tab_status: {
-        '0': '已完成',
-        '1': '已取消',
-        '2': '剩余时间'
+        '2': '已完成',
+        '-1': '已取消',
+        '1': '进行中',
+        '0': '进行中'
       }
     };
   },
-  onLoad(e) {},
-  onShow() {},
+  onLoad(e) {
+    this.getList();
+  },
+  onShow() {
+    this.list = [];
+    this.loading = true;
+    this.getList();
+  },
   methods: {
+    getList() {
+      loading(1, '加载中....');
+      let data = this.page;
+      data['status'] = this.tab_index;
+      if (this.tab_index == 0) delete data.status;
+      myAxios.orderList(data).then(res => {
+        loading(2);
+        this.list = [...this.list, ...res.data.list];
+        this.list.forEach(item => {
+          this.$set(item, 'time', timestampToTime(item.createTime));
+        });
+        if (this.list.length >= res.data.total) {
+          this.loading = false;
+        }
+      });
+    },
     scroll() {
-      console.log(1);
+      if (this.loading) {
+        this.page.pageNum = this.page.pageNum + 1;
+        this.getList();
+      }
     },
     tab(index) {
-      this.tab_index = index;
+      if (index != this.tab_index) {
+        this.tab_index = index;
+        this.list = [];
+        this.loading = true;
+        this.getList();
+      }
     },
-    toRouter(url,data){
+    toRouter(url, data) {
       uni.navigateTo({
         url: url + fn.params(data)
       });
-    },
+    }
   },
   computed: {},
   components: {
@@ -87,7 +135,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$text: #534dff;
+@import './index.scss';
 $time: #fa3354;
 .flex {
   display: flex;
@@ -107,43 +155,44 @@ $time: #fa3354;
       }
       .top {
         padding-bottom: 30upx;
-        .left>view:nth-of-type(2),.right>view{
+        .left > view:nth-of-type(2),
+        .right > view {
           margin-top: 40upx;
         }
         .left {
           flex: 1.5;
-           >view:nth-of-type(1){
-             align-items: flex-end;
-             .name{
-               align-items: center;
-             }
-             .icon{
-               text-align: center;
-               font-size: 18upx;
-               width: 68upx;
-               line-height: 34upx;
-               color: #fff;
-               margin-right: 6upx;
-               border-radius: 2px;
-             }
-             .sell{
-               background: #FA3354;
-             }
-             .buy{
-               background: #00C188;
-             }
-             .creattime{
-               font-size: 26upx;
-               padding-bottom: 6upx;
-               margin-left: 20upx;
-             }
-           }
-          >view:nth-of-type(2){
+          > view:nth-of-type(1) {
+            align-items: flex-end;
+            .name {
+              align-items: center;
+            }
+            .icon {
+              text-align: center;
+              font-size: 18upx;
+              width: 68upx;
+              line-height: 34upx;
+              color: #fff;
+              margin-right: 6upx;
+              border-radius: 2px;
+            }
+            .sell {
+              background: #fa3354;
+            }
+            .buy {
+              background: #00c188;
+            }
+            .creattime {
+              font-size: 26upx;
+              padding-bottom: 6upx;
+              margin-left: 20upx;
+            }
+          }
+          > view:nth-of-type(2) {
             color: #333;
             font-size: 32upx;
-            view{
+            view {
               margin-top: 16upx;
-              text{
+              text {
                 margin-right: 20upx;
               }
             }
@@ -168,23 +217,24 @@ $time: #fa3354;
                 margin-left: 14upx;
               }
             }
-            .text_right{
+            .text_right {
               padding-right: 46upx;
               color: #999;
             }
-            >text{
+            > text {
               margin-top: 16upx;
             }
             text {
               color: #999;
             }
           }
-          > text,.text_right {
+          > text,
+          .text_right {
             display: inline-block;
             box-sizing: border-box;
             width: 100%;
             text-align: right;
-            color: $text;
+            color: $active;
           }
         }
       }
@@ -210,7 +260,7 @@ $time: #fa3354;
     height: 92upx;
     border-bottom: 1px solid #f5f5f5;
     .tabActive {
-      color: $text;
+      color: $active;
       position: relative;
     }
     .tabActive::before {
@@ -220,7 +270,7 @@ $time: #fa3354;
       left: 0;
       width: 100%;
       height: 2px;
-      background: $text;
+      background: $active;
     }
   }
 }

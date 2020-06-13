@@ -68,11 +68,40 @@ export function selfOrder(data) {
   })
 }
 /*订单列表--------------------------------------*/
-// 查询订单详情
-export function getOrder() {
+// 订单列表
+export function orderList(data) {
   return new Promise((resolve, reject) => {
-    request.get({
-      url: `/otc/orders/${id}`
+    request.post({
+      url: `/otc/queryselforder`,
+      data
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+// 修改订单状态
+export function editOrder(data) {
+  return new Promise((resolve, reject) => {
+    request.post({
+      url: `/otc/changestatus`,
+      data
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
+
+// 查询订单详情
+export function getOrder(data) {
+  return new Promise((resolve, reject) => {
+    request.post({
+      url: `/otc/getorderinfo`,
+      data
     }).then(res => {
       resolve(res)
     }).catch(err => {

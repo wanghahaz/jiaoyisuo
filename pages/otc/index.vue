@@ -17,6 +17,7 @@
     <swiper :current="tab_area" class="swiper" @change="swiperTab">
       <swiper-item>
         <view @tap="editTab(1, 0)" class="arae_1">
+          <view class="num">数量</view>
           <view class="uni-input"><input class="uni-input" v-model="fromData.qty" placeholder="请输入数量" type="text" value="" /></view>
           <view class="tip">按数量购买</view>
           <view class="sub_buy" @click="oneKey">{{ sellType == 0 ? '一键购买' : '一键出售' }}</view>
@@ -24,7 +25,8 @@
         </view>
       </swiper-item>
       <swiper-item>
-        <view @tap="editTab(1, 1)" class="optional">
+        <!-- @tap="editTab(1, 1)" -->
+        <view class="optional">
           <scroll-view scroll-y="true" class="scroll_box" @scrolltolower="scroll">
             <view class="add flex" @click="toRouter('/pages/otc/issue', {})"></view>
             <view class="item flex" v-for="item in otcList" :key="item.id">
@@ -46,11 +48,16 @@
                   <text>￥{{ item.price.toFixed(2) }}</text>
                   <text>/SC</text>
                 </view>
-                <view :class="sellType ? 'darger' : ''" @click.stop="toRouter('/pages/otc/buyOtc', { type: sellType ,id:item.id})">{{ sellType == 0 ? '去购买' : '去出售' }}</view>
+                <view
+                  :class="userId == item.userId ? 'sell_false' : ''"
+                  @click.stop="toRouter('/pages/otc/buyOtc', { type: sellType, id: item.id ,to:1}, )"
+                >
+                  {{ sellType == 0 ? '去购买' : '去出售' }}
+                </view>
               </view>
             </view>
             <view v-if="loading && otcList.length == 0" class="nomore">加载中....</view>
-            <view v-else class="nomore">{{ loading ? '加载更多...' : '已加载全部...' }}</view>
+            <view v-else class="nomore">{{ loading ? '加载更多...' : '已加载全部' }}</view>
           </scroll-view>
         </view>
       </swiper-item>
@@ -102,6 +109,7 @@ export default {
   name: '',
   data() {
     return {
+      userId: '',
       pageInfo: {
         page: 1,
         pageSize: 10
@@ -124,7 +132,11 @@ export default {
       }
     };
   },
-  onLoad(e) {},
+  onLoad(e) {
+    if (uni.getStorageSync('userinfo')) {
+      this.userId = uni.getStorageSync('userinfo').userId;
+    }
+  },
   onShow() {
     if (this.tab_area) {
       this.loading = true;
@@ -146,7 +158,6 @@ export default {
               this.loading = false;
             }
           }
-          // console.log(res);
         })
         .catch(err => {});
     },
@@ -160,9 +171,10 @@ export default {
       if (this.sellType == 0) {
         res = await myAxios.addOrder(Object.assign(this.fromData, { type: this.sellType == 0 ? 1 : 2 }));
         if (res.code == 1) {
-          toast({text:'操作成功'})
+          toast({ text: '操作成功' });
           setTimeout(() => {
-            this.toRouter('/pages/otc/orderContent', { id: res.data, type: 1, status: 1 });
+            // toRouter('/pages/otc/orderContent', { type_order: item.orderType, id: item.id, type: item.type == 1 ? '1' : '0' })
+            this.toRouter('/pages/otc/orderContent', { id: res.data, type_order: 'trade', type: this.sellType == 0 ? 1 : 0 });
           }, 1500);
         } else {
           toast({ text: res.msg || '网络加载失败..' });
@@ -175,9 +187,9 @@ export default {
           } else {
             res = await myAxios.addOrder(Object.assign(this.fromData, { bankId: this.bank.id, aliId: this.alis.id, type: this.sellType == 0 ? 1 : 2 }));
             if (res.code == 1) {
-              toast({text:'操作成功'})
+              toast({ text: '操作成功' });
               setTimeout(() => {
-                this.toRouter('/pages/otc/orderContent', { id: res.data, type: 1, status: 1 });
+                this.toRouter('/pages/otc/orderContent', { id: res.data, type_order: 'trade', type: this.sellType == 0 ? 1 : 0 });
               }, 1500);
             } else {
               toast({ text: res.msg || '网络加载失败..' });
@@ -212,6 +224,9 @@ export default {
       }
     },
     toRouter(url, data) {
+      if(data.to ==1){
+        return;
+      }
       uni.navigateTo({
         url: url + fn.params(data)
       });
@@ -239,10 +254,12 @@ export default {
         }
       }
       if (this.tab_area == 1) {
-        this.loading = true;
-        this.otcList = [];
-        this.pageInfo.page = 1;
-        this.getList();
+        if (this.ind != this.sellType) {
+          this.loading = true;
+          this.otcList = [];
+          this.pageInfo.page = 1;
+          this.getList();
+        }
       }
     }
   },
@@ -402,7 +419,7 @@ $bg: #534dff;
           }
         }
         .right {
-          flex: 0.8;
+          flex: 0.9;
           flex-direction: column;
           justify-content: space-between;
           > view:nth-of-type(1) {
@@ -427,6 +444,9 @@ $bg: #534dff;
             color: #fff;
             font-size: 30upx;
           }
+          > .sell_false {
+            background: #eee !important;
+          }
         }
       }
     }
@@ -436,6 +456,11 @@ $bg: #534dff;
   }
   .arae_1 {
     padding: 0 4%;
+    .num {
+      color: #999;
+      font-size: 30upx;
+      margin: 30upx 0 0 20upx;
+    }
     .service_money {
       text-align: center;
       margin-top: 40upx;

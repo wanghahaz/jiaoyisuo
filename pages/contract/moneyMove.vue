@@ -32,13 +32,13 @@
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 import * as myAxios from '@/api/contract_api.js';
 import { toast, loading, model, fn } from '@/common/common.js';
-//1.期权合约账户 2.永续合约账户 3.交割合约账户 4.币币账户 5.法币账户
+//1.期权合约账户 2.永续合约账户 3.交割合约账户 4.币币账户 5.OTC账户
 let type ={
   '期权合约账户':'1',
   '永续合约账户':'2',
   '交割合约账户':'3',
   '币币账户':'4',
-  '法币账户':'5'
+  'OTC账户':'5'
 }
 export default {
   name: 'moneyMove',
