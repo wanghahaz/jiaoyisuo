@@ -14,12 +14,12 @@
     </view>
     <view class="from">
       <view class="input flex">
-        <input type="text" v-model="from.qty" placeholder="请输入想要购买总数量" />
+        <input type="text" v-model="from.qty" :placeholder="buy_pay == 0 ? '请输入想要购买总数量' : '请输入想要出售总数量'" />
         <text class="name">SC</text>
         <text class="all">全部</text>
       </view>
       <view class="input flex">
-        <input type="text" v-model="sums" disabled placeholder="请输入想要购买总金额" />
+        <input type="text" v-model="sums" disabled :placeholder="buy_pay == 0 ? '请输入想要购买总数量' : '请输入想要出售总数量'" />
         <text class="name">CNY</text>
         <text class="all">全部</text>
       </view>
@@ -27,7 +27,7 @@
     <view v-if="buy_pay == 1" class="pay flex">
       <view>收款方式</view>
       <view>
-        <view @click="toRouter('/pages/otc/payList', { type: 1})">
+        <view @click="toRouter('/pages/otc/payList', { type: 1 })">
           <text>支付宝</text>
           <text class="account">{{ alis.acount }}</text>
           <text class="iconfont iconxialabeifen"></text>
@@ -54,7 +54,7 @@
       </view>
     </view>
     <view :class="from.qty && sums ? 'subs_active' : ''" class="subs" v-if="buy_pay == 0" @click="sub">购买</view>
-    <view :class="from.qty && sums && (bank.id || alis.id) ? 'subs_active' : ''" class="subs" v-else @click="sub">购买</view>
+    <view :class="from.qty && sums && (bank.id || alis.id) ? 'subs_active' : ''" class="subs" v-else @click="sub">出售</view>
   </view>
 </template>
 
@@ -84,7 +84,8 @@ export default {
       }
     };
   },
-  onUnload(){
+  onUnload() {
+    uni.removeStorageSync('s');
     if (timers) {
       clearInterval(timers);
     }
@@ -93,13 +94,27 @@ export default {
     this.buy_pay = e.type;
     this.id = e.id;
     this.getOrder();
-    timers=setInterval(()=>{
+    timers = setInterval(() => {
+      this.s--;
+      uni.setStorageSync('s', this.s);
+      if (this.s == 0) {
+        clearInterval(timers);
+        this.back_();
+      }
+    }, 1000);
+  },
+  onShow() {
+    if (uni.getStorageSync('s')) {
+      timers = setInterval(() => {
+        this.s = uni.getStorageSync('s');
         this.s--;
-        if(this.s==0){
-          clearInterval(timers)
-          this.back_()
+        uni.setStorageSync('s', this.s);
+        if (this.s == 0) {
+          clearInterval(timers);
+          this.back_();
         }
-    },1000)
+      }, 1000);
+    }
   },
   onHide() {
     if (timers) {
@@ -139,22 +154,28 @@ export default {
         data.bankId = this.bank.id;
         data.aliId = this.alis.id;
       }
-      let res =await myAxios.addOrder(data)
-      // console.log(res)
-      if(res.code ==1){
-        toast({text:'操作成功'})
-        setTimeout(()=>{
-           this.toRouter('/pages/otc/orderContent', { id: res.data, type: this.buy_pay==0?1:0,  type_order: 'trade', });
-        },1500)
-      }else{
-        toast({text:res.msg||'操作失败'})
+      let res = await myAxios.addOrder(data);
+      loading(2)
+      if (res.code == 1) {
+        toast({ text: '操作成功' });
+        setTimeout(() => {
+          this.toRouter('/pages/otc/orderContent', { id: res.data, type: this.buy_pay == 0 ? 1 : 0, type_order: 'trade'},1);
+        }, 1500);
+      } else {
+        toast({ text: res.msg || '操作失败' });
       }
-      loading(2);
+     
     },
-    toRouter(url, data) {
-      uni.navigateTo({
-        url: url + fn.params(data)
-      });
+    toRouter(url, data,type) {
+      if (type) {
+        uni.redirectTo({
+          url: url + fn.params(data)
+        });
+      } else {
+        uni.navigateTo({
+          url: url + fn.params(data)
+        });
+      }
     },
     back_() {
       uni.navigateBack({

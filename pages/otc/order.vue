@@ -83,7 +83,7 @@ export default {
     };
   },
   onLoad(e) {
-    this.getList();
+    // this.getList();
   },
   onShow() {
     this.list = [];

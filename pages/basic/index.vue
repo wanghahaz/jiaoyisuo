@@ -1,5 +1,12 @@
 <template>
   <view class="container" @scroll="scrolling">
+    <view class="status_app"></view>
+    <view class="header">
+      <text class="iconfont iconbianzubeifen7" @click="goto('/pages/user/index')"></text>
+      <image src="../../static/images/title_img.png" mode=""></image>
+      <text class="iconfont iconsystem-serchbx" @click="search"></text>
+    </view>
+    <view class="app_top"></view>
     <view class="myswiperBox">
       <uni-swiper-dot :info="bannerList" :current="current" class="myswiper">
         <swiper class="swiper-box" @change="change">
@@ -38,7 +45,8 @@
             ref="tabs"
           ></QSTabs>
         </view>
-        <text class="iconfont iconsystem-serchbx" @click="search"></text>
+        <text @click="goto('/pages/my_select/optional_area')">自选区</text>
+        <!-- <text class="iconfont iconsystem-serchbx" @click="search"></text> -->
       </view>
       <view class="swiper">
         <view class="thead">
@@ -98,15 +106,14 @@ export default {
     indexUchart,
     uniIcons
   },
-  onLoad(){
-  },
+  onLoad() {},
   // 监听右上角按钮
   onNavigationBarButtonTap() {
-    uni.navigateTo({url:"/pages/user/index"})
+    uni.navigateTo({ url: '/pages/user/index' });
   },
   data() {
     return {
-      currentTabIndex:0,
+      currentTabIndex: 0,
       sort: 1,
       sortName: '最新',
       overflow: false,
@@ -203,7 +210,51 @@ export default {
 .container {
   overflow: auto;
   height: 100%;
+  .status_app {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background: #fff;
+    /* #ifdef APP-PLUS */
+    height: var(--status-bar-height);
+    /* #endif */
+  }
+  .header {
+    position: fixed;
+    width: 100%;
+    height: 44px;
+    align-items: center;
+    background: #fff;
+    top: 0;
+    left: 0;
+    z-index: 999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 4%;
+    /* #ifdef APP-PLUS */
+    top: var(--status-bar-height);
+    /* #endif */
+    font-size: 32upx;
+    image {
+      width: 55%;
+      height: 28px;
+    }
+    .icons {
+      position: absolute;
+      left: 2%;
+    }
+  }
+  .app_top {
+    /* #ifdef APP-PLUS */
+    height: var(--status-bar-height);
+    /* #endif */
+  }
   .myswiperBox {
+    margin-top: 44px;
     background-color: #fff;
     padding-bottom: 10px;
     border-radius: 8px;
@@ -245,18 +296,27 @@ export default {
   height: 340rpx;
 }
 .tabsBox {
-  height: 100%;
+  height:100%;
+  // overflow-y: auto;
   display: flex;
   flex-direction: column;
   .tabs {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #fff;
     view {
-      width: 660rpx;
+      width:100%;
+      box-sizing: border-box;
+      padding-right: 120upx;
     }
     text {
+      width: 120upx;
+      text-align: right;
+      position: absolute;
+      right: 0;
+      font-size: 30upx;
       margin-right: 20rpx;
       display: block;
     }

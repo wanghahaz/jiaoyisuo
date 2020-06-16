@@ -68,14 +68,14 @@
     <view class="operation">
       <view class="bb" @click="jump('safe')">
         <view class="left">
-          <image src="../../static/images/user_3.png"></image>
+          <image class="safety" src="../../static/images/user_3.png"></image>
           <view>安全中心</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
       </view>
       <view class="bb" @click="jumpList">
         <view class="left">
-          <image src="../../static/images/user_4.png"></image>
+          <image class="safety" src="../../static/images/user_4.png"></image>
           <view>公告中心</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
@@ -91,21 +91,21 @@
 			</view> -->
       <view class="bb" @click="jumpDetails(4)">
         <view class="left">
-          <image src="../../static/images/user_6.png"></image>
+          <image class="safety" src="../../static/images/user_6.png"></image>
           <view>关于我们</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
       </view>
       <view class="bb" @click="jumpDetails(18)">
         <view class="left">
-          <image src="../../static/images/user_7.png"></image>
+          <image class="notice" src="../../static/images/user_7.png"></image>
           <view>联系我们</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
       </view>
       <view class="bb" @click="jumpDetails(14)">
         <view class="left">
-          <image src="../../static/images/user_8.png"></image>
+          <image class="notice" src="../../static/images/user_8.png"></image>
           <view>商务合作</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
@@ -113,7 +113,7 @@
 
       <view class="bb" @click="toRouter('/pages/user/receivingSet')">
         <view class="left">
-          <image src="../../static/images/user_8.png"></image>
+          <image src="../../static/images/sfk.png"></image>
           <view>收付款设置</view>
         </view>
         <view class="right"><image src="../../static/images/right_2.png"></image></view>
@@ -342,11 +342,17 @@ export default {
     font-size: 30upx;
     .left {
       image {
-        width: 36upx;
-        height: 32upx;
-        border-radius: 50%;
+        width: 34upx;
+        height: 30upx;
+        // border-radius: 50%;
         margin-right: 20upx;
         vertical-align: bottom;
+      }
+      .safety{
+        height: 34upx;
+      }
+      .notice{
+        height: 32upx;
       }
       view {
         font-size: 14px;

@@ -4,7 +4,7 @@
 		<view class="table">
 			<view class="thead">
 				<text style="width: 30%;">名称</text>
-				<text style="width: 30%;">最新(USDT)</text>
+				<text style="width: 30%;text-align: center;">最新</text>
 				<text style="width: 24%;text-align: center">涨幅</text>
 				<text style="width: 20%;text-align: right">自选</text>
 			</view>
@@ -51,6 +51,7 @@
 import QSTabs from '@/components/QS-tabs/QS-tabs'
 import {indexPage} from '@/api/index_api'
 import {saveCoin, cancelCoin} from '@/api/exchange_api'
+import { toast, loading, model, fn } from '@/common/common.js';
 
 export default {
 	components: {
@@ -109,7 +110,9 @@ export default {
 			this.initData()
 		},
 		async initData() {
+      loading(1,'加载中')
 			let indexData = await indexPage()
+      loading(2)
 			this.tabs = indexData.data.marketSortInfoList.map(item => item.sortName)
 			this.tabsInfo = indexData.data.marketSortInfoList
 			this.mineList = indexData.data.userMaketList

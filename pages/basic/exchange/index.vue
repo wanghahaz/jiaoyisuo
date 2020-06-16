@@ -1,5 +1,5 @@
 <template>
-  <view v-if="marketInfo.coinName " class="exchangeBox">
+  <view v-if="marketInfo.coinName" class="exchangeBox">
     <view class="title">
       <text>{{ marketInfo.coinCnName }}</text>
       <text>{{ marketInfo.coinName }}</text>
@@ -56,7 +56,7 @@
           详情图表
         </button>
       </view>
-      <view class="chart"><index-uchart class="chartdetail" :uchartData='chartData' :chartData="chartData"></index-uchart></view>
+      <view class="chart"><index-uchart class="chartdetail" :uchartData="chartData" :chartData="chartData"></index-uchart></view>
     </view>
     <view class="data">
       <view>
@@ -133,7 +133,7 @@
       </view>
     </view>
     <view class="footer">
-      <view @click="goto('/pages/my_select/index')">添加自选</view>
+      <view @click="jump('/pages/my_select/optional_area',{})">添加自选</view>
       <view @click="jump('/pages/basic/exchange/sellBuy', { marketId: marketId, type: 1 })">买入</view>
       <view @click="jump('/pages/basic/exchange/sellBuy', { marketId: marketId, type: 2 })">卖出</view>
     </view>
@@ -167,9 +167,15 @@ export default {
   },
   methods: {
     jump(url, data) {
-      uni.navigateTo({
-        url: url + fn.params(data)
-      });
+      if (!uni.getStorageSync('userinfo')) {
+        uni.reLaunch({
+          url: '/pages/login_register/login'
+        });
+      } else {
+        uni.navigateTo({
+          url: url + fn.params(data)
+        });
+      }
     },
     goto(url) {
       uni.switchTab({

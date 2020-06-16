@@ -19,9 +19,9 @@
         <view @tap="editTab(1, 0)" class="arae_1">
           <view class="num">数量</view>
           <view class="uni-input"><input class="uni-input" v-model="fromData.qty" placeholder="请输入数量" type="text" value="" /></view>
-          <view class="tip">按数量购买</view>
+          <view class="tip">按数量{{sellType==0?'购买':'出售'}}</view>
           <view class="sub_buy" @click="oneKey">{{ sellType == 0 ? '一键购买' : '一键出售' }}</view>
-          <view class="service_money">交易手续费0</view>
+          <!-- <view class="service_money">交易手续费0</view> -->
         </view>
       </swiper-item>
       <swiper-item>
@@ -48,10 +48,7 @@
                   <text>￥{{ item.price.toFixed(2) }}</text>
                   <text>/SC</text>
                 </view>
-                <view
-                  :class="userId == item.userId ? 'sell_false' : ''"
-                  @click.stop="toRouter('/pages/otc/buyOtc', { type: sellType, id: item.id ,to:1}, )"
-                >
+                <view :class="userId == item.userId ? 'sell_false' : ''" @click.stop="toRouter('/pages/otc/buyOtc', { type: sellType, id: item.id })">
                   {{ sellType == 0 ? '去购买' : '去出售' }}
                 </view>
               </view>
@@ -205,6 +202,11 @@ export default {
     },
     // 一键操作
     async oneKey() {
+      if (!uni.getStorageSync('userinfo')) {
+        uni.reLaunch({
+          url: '/pages/login_register/login'
+        });
+      }
       if (isNaN(this.fromData.qty) || this.fromData.qty == '') {
         toast({ text: '请输入正确的格式' });
         return false;
@@ -212,21 +214,21 @@ export default {
       loading(1, '加载中...');
       let res = await myAxios.referencePrice(this.sellType == 0 ? 1 : 2, this.fromData.qty);
       loading(2);
-      console.log(res);
       if (res.code == 1) {
         this.fromData.price = res.data.price;
         this.fromData.othersideUserId = res.data.userId;
         this.fromData.othersideOrderId = res.data.id;
         this.buySort = 1;
         this.show_();
-      } else {
+      }
+      if (res.code != '-1' && res.code != 1) {
         toast({ text: res.msg || '暂符合需求的交易单~' });
       }
     },
     toRouter(url, data) {
-      if(data.to ==1){
-        return;
-      }
+      // if(data.to ==1){
+      //   return;
+      // }
       uni.navigateTo({
         url: url + fn.params(data)
       });
@@ -367,12 +369,13 @@ $bg: #534dff;
       height: 100%;
       .add {
         position: fixed;
-        right: 5%;
-        bottom: 100upx;
-        width: 70upx;
-        height: 70upx;
+        right: 7%;
+        bottom: 120upx;
+        width: 80upx;
+        height: 80upx;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0  8px 10px 0px rgba(0,0,0,0.2);
         justify-content: center;
         align-items: center;
       }
@@ -383,16 +386,16 @@ $bg: #534dff;
         background: $bg;
       }
       .add::after {
-        left: 33upx;
-        width: 4upx;
-        top: 18upx;
-        height: 34upx;
+        width:6upx;
+        left: 37upx;
+        height: 36upx;
+        top: 22upx;
       }
       .add::before {
-        left: 18upx;
-        width: 34upx;
-        height: 4upx;
-        top: 33upx;
+        height: 6upx;
+        top: 37upx;
+        width: 36upx;
+        left:22upx;
       }
       .item {
         padding: 40upx 4%;

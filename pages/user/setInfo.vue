@@ -56,7 +56,7 @@
 							let unLogin = logout().then((res)=> {
 								if (res.code == 1) {
 									uni.showToast({
-										title: res.msg,
+										title: '退出成功',
 										icon: "none"
 									})
                   uni.clearStorage('userinfo')

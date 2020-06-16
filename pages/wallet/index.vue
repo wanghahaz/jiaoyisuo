@@ -10,16 +10,16 @@
       <view class="bill flex">
         <view>
           <text>币币余额</text>
-            <text>{{ total&&total.scBanlance.toFixed(2) }}</text>
+            <text>{{ total&&(total.scBanlance/1).toFixed(2) }}</text>
         </view>
         <view>
           <text>OTC余额</text>
-          <text>{{ total&&total.otcAccountBalances.toFixed(2) }}</text>
+          <text>{{ total&&(total.otcAccountBalances/1).toFixed(2) }}</text>
         </view>
       
         <view>
           <text>合约余额</text>
-          <text>{{ total&&total.contractAccountBalances.toFixed(2) }}</text>
+          <text>{{ total&&(total.contractAccountBalances/1).toFixed(2) }}</text>
         </view>
       </view>
       <view class="router flex">

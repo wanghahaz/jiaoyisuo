@@ -28,7 +28,7 @@
       </view>
       <view class="flex">
         <text>数量(SC)</text>
-        <input v-model="content.qty" type="text" placeholder="请输入购买数量" value="" />
+        <input v-model="content.qty" type="text" :placeholder="tab_ind==1?'请输入购买数量':'请输入出售数量'" value="" />
       </view>
       <view class="flex">
         <text>限额(SC)</text>

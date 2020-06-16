@@ -40,7 +40,7 @@
           <text>超时自动取消</text> -->
         </view>
       </view>
-      <view v-if="status == 1 && type == 0" class="pending">
+      <view v-if="status == 1 && type == 0 && type_order != 'order'" class="pending">
         <view>￥{{ (content.otcOrdersDetailsInfo.price * content.otcOrdersDetailsInfo.qty).toFixed(2) }}</view>
         <view><text>买家已付款，请放币</text></view>
       </view>
