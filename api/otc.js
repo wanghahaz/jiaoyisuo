@@ -1,6 +1,18 @@
 import request from '../common/request';
 
 
+// 手续费
+export function getFee(name) {
+  return new Promise((resolve, reject) => {
+    request.get({
+      url: `/otc/getfee/${name}`,
+    }).then(res => {
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
 //  发布委托 
 export function otcorder(data) {
   return new Promise((resolve, reject) => {

@@ -5,34 +5,41 @@
         "navigationBarTitleText": "行情",
         "titleImage": "./static/images/title_img.png",
         "navigationBarTextStyle": "black",
-        "app-plus": {
-          "titleNView": {
-            "buttons": [{
-              "fontSrc": "/static/iconfont/iconfont.ttf",
-              "fontSize": "16px",
-              "text": "\ue63a",
-              "width": "25px"
-            }],
-            "backgroundColor": "#fff"
-          }
-        }
+        "navigationStyle": "custom"
+        // "app-plus": {
+        //   "titleNView": {
+        //     "buttons": [{
+        //       "fontSrc": "/static/iconfont/iconfont.ttf",
+        //       "fontSize": "16px",
+        //       "text": "\ue63a",
+        //       "width": "25px"
+        //     }],
+        //     "backgroundColor": "#fff"
+        //   }
+        // }
       }
     },
     {
       "path": "pages/my_select/index",
       "style": {
-        "navigationBarTitleText": "自选区",
-        "navigationBarTextStyle": "black",
-        "app-plus": {
-          "titleNView": {
-            "buttons": [{
-              "fontSrc": "/static/iconfont/iconfont.ttf",
-              "fontSize": "16px",
-              "text": "\ue687"
-            }],
-            "backgroundColor": "#fff"
-          }
-        }
+        "navigationBarTitleText": "行情",
+        "navigationBarTextStyle": "black"
+        // "app-plus": {
+        //   "titleNView": {
+        //     "buttons": [{
+        //       "fontSrc": "/static/iconfont/iconfont.ttf",
+        //       "fontSize": "16px",
+        //       "text": "\ue687"
+        //     }],
+        //     "backgroundColor": "#fff"
+        //   }
+        // }
+      }
+    },
+    {
+      "path": "pages/my_select/optional_area",
+      "style": {
+        "navigationBarTitleText": "自选区"
       }
     },
     {
@@ -70,17 +77,17 @@
     {
       "path": "pages/basic/exchange/index",
       "style": {
-        "navigationBarTitleText": "股票详情",
-        "app-plus": {
-          "titleNView": {
-            "buttons": [{
-              "fontSrc": "/static/iconfont/iconfont.ttf",
-              "fontSize": "16px",
-              "text": "\ue687"
-            }],
-            "backgroundColor": "#fff"
-          }
-        }
+        "navigationBarTitleText": "股票详情"
+        // "app-plus": {
+        //   "titleNView": {
+        //     "buttons": [{
+        //       "fontSrc": "/static/iconfont/iconfont.ttf",
+        //       "fontSize": "16px",
+        //       "text": "\ue687"
+        //     }],
+        //     "backgroundColor": "#fff"
+        //   }
+        // }
       }
     },
     {
@@ -98,8 +105,10 @@
           "titleNView": {
             "buttons": [ //原生标题栏按钮配置,
               {
-                "text": "提现",
-                "fontSize": "14px"
+                "text": "提币地址",
+                "fontSize": "14px",
+                "width": "65px"
+                
               }
             ]
           }
@@ -402,7 +411,7 @@
         "navigationBarTitleText": "购买SC",
         "navigationStyle": "custom"
       }
-    },{
+    }, {
       "path": "pages/otc/payList",
       "style": {
         "navigationBarTitleText": "银行卡列表"

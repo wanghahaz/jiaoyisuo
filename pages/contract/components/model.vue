@@ -91,18 +91,29 @@ export default {
     async goSub() {
       //  需要判断买入卖出条件成立不成立  判断是否开启交易密码  如果没有开启 去设置  开启后输入密码
       let that = this;
-      if (this.pwd == 0) {
-        uni.showModal({
-          content: '您还没有设置交易密码，请您先去设置交易密码',
-          success: function(res) {
-            // console.log(res)
-            if (res.confirm) {
-              that.jump('/pages/user/changePwd', { type: 1 });
-            }
-          }
-        });
+      let res = await myAxios.getPower();
+      if (res.code != '1') {
+        toast({ text: '网络出错' });
+        return;
+      }
+      // res.data.transactionPasswordIsNull  是否设置过交易密码 0：设置过  1：需要设置
+      // res.data.needTransactionPassword    是否需要填写交易密码 0：不需要 1：需要
+      if (res.data.needTransactionPassword == 0) {
+        this.$emit('editType', { type: 2 });
       } else {
-        this.$emit('editType', { type: 1 });
+        if (res.data.transactionPasswordIsNull == 1) {
+          uni.showModal({
+            content: '您还没有设置交易密码，请您先去设置交易密码',
+            success: function(res) {
+              // console.log(res)
+              if (res.confirm) {
+                that.jump('/pages/user/changePwd', { type: 1 });
+              }
+            }
+          });
+        } else {
+          this.$emit('editType', { type: 1 });
+        }
       }
     },
     jump(url, data) {

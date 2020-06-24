@@ -15,7 +15,7 @@ let fn = {
 function toast(obj) {
   uni.showToast({
     icon: obj.icon || 'none',
-    title: obj.text||'',
+    title: obj.text||obj.title||'',
     duration: obj.time || 2000
   })
 }

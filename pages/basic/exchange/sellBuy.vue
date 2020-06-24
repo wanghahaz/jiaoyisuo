@@ -84,7 +84,7 @@
           <!-- <image class="pwd_img" src="../../../static/images/eye_2.png" @click="edit_pwd()"></image> -->
         </view>
       </view>
-      <view v-if="type == 1" class="tip">应付金额{{ payNum ? payNum.toFixed(2) : '' }}，实付金额{{ payNum ? payNum.toFixed(2) : '' }}</view>
+      <view v-if="type == 1" class="tip">应付金额{{ payNum ? payNum.toFixed(2) : '' }}，实付金额{{ payNum ? (payNum/1+(payNum*(fee/100))).toFixed(2) : '' }},手续费 {{payNum ? (payNum*(fee/100)).toFixed(2):''}}</view>
       <view class="popSub" @click="popSub">立即支付</view>
     </view>
   </view>
@@ -95,6 +95,7 @@ import indexUchart from '@/components/my-uchart/index-uchart';
 import { findListByMarketId } from '@/api/index_api';
 import { userCenter } from '@/api/center_api.js';
 import { exchange } from '@/api/exchange_api.js';
+import { getFee } from '@/api/otc.js';
 import { toast, loading, fn, model } from '@/common/common.js';
 import uniIcons from '@/components/uni-icons/uni-icons.vue';
 export default {
@@ -104,6 +105,7 @@ export default {
   },
   data() {
     return {
+      fee:0,
       addMarket: '',
       oddMarket: '',
       status: {},
@@ -128,12 +130,20 @@ export default {
   },
   computed: {
     payNum() {
-      console.log(this.data);
+      // console.log(this.data);
       if (this.data.qty && this.data.price) return (this.data.qty / 1) * (this.data.price / 1);
       return 0;
     }
   },
   methods: {
+    getFee(){
+      getFee('otcFeeRate').then( res=>{
+        // console.log(res)
+        if(res.code==1){
+          this.fee =res.data
+        }
+      })
+    },
     edit_pwd() {
       this.pwd = !this.pwd;
     },
@@ -148,7 +158,7 @@ export default {
       }
     },
     changetab(type) {
-      console.log(1);
+      // console.log(1);
       this.type = type;
       if (this.type != type) {
         (this.data.qty = ''), (this.data.price = '');
@@ -268,7 +278,7 @@ export default {
   onLoad(opt) {
     this.marketId = opt.marketId;
     this.type = opt.type;
-
+    this.getFee()
     findListByMarketId({ marketId: this.marketId, minType: '30' }).then(res => {
       this.market = res.data[res.data.length - 1];
       this.addMarket = (this.market.close * 1.1).toFixed(2);

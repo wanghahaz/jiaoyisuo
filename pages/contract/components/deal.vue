@@ -2,7 +2,9 @@
   <view class="deal_contract">
     <view class="deal_header">
       <view class="left">
-        <view class="name_"><text class="name_user">{{contractName}}</text></view>
+        <view class="name_">
+          <text class="name_user">{{ contractName }}</text>
+        </view>
         <text class="name_tip">看涨</text>
         <!-- <text class="name_code">300133</text> -->
         <view class="input">
@@ -46,7 +48,7 @@
         <text class="deal_text" @click="tab(1)" :class="tabIndex == 1 ? 'tabActive' : ''">当前委托</text>
         <text class="deal_text" @click="tab(2)" :class="tabIndex == 2 ? 'tabActive' : ''">当前成交</text>
       </view>
-      <scroll-view class="scrollView" :scroll-y="'true'" >
+      <scroll-view class="scrollView" :scroll-y="'true'">
         <template v-if="tabIndex == 1">
           <view @click="toRouter('/pages/contract/entrustContent', { id: item.id })" v-for="item in principalList" :key="item.id" class="list">
             <view class="box_content">
@@ -103,15 +105,7 @@
       <view v-if="deal_type == 1" class="tip">应付金额{{ payNum ? payNum.toFixed(2) : '' }}，实付金额{{ payNum ? payNum.toFixed(2) : '' }}</view>
       <view class="popSub" @click="addOrder">立即支付</view>
     </view>
-    <mask-box
-      :orderId="orderId"
-      :pwd="power && power.needTransactionPassword"
-      @callBack="callBack"
-      @editType="editType"
-      :model_show="model_show"
-      :subType="subType"
-      :fromData="data"
-    ></mask-box>
+    <mask-box :orderId="orderId" :pwd="1" @callBack="callBack" @editType="editType" :model_show="model_show" :subType="subType" :fromData="data"></mask-box>
   </view>
 </template>
 
@@ -159,7 +153,7 @@ export default {
   },
   data() {
     return {
-      contractName:'',
+      contractName: '',
       power: null, //权限 控制 、
       deal_type: 1, //买入or卖出
       pop_show: false, // 密码输入弹框
@@ -182,13 +176,12 @@ export default {
     uni.closeSocket();
   },
   mounted() {
-    // console.log(this.socketId);
-    this.contractName =uni.getStorageSync('contractName')
+    this.contractName = uni.getStorageSync('contractName');
     this.getPower();
     this.initSocket();
     this.getPrincipalList(this.socketId);
   },
-  methods: {   
+  methods: {
     initSocket() {
       let userinfo = uni.getStorageSync('userinfo');
       uni.connectSocket({
@@ -238,8 +231,13 @@ export default {
       }
     },
     editType(e) {
-      this.pop_show = true;
-      this.model_show = false;
+      if (e.type == 1) {
+        this.pop_show = true;
+        this.model_show = false;
+      } else {
+        this.model_show =false;
+        this.addOrder()
+      }
     },
     //  撤单弹框
     back_(bol, type, orderId) {
@@ -277,7 +275,7 @@ export default {
         }
       });
     },
-    
+
     // 买卖按钮加判断
     sub(type) {
       if (isNaN(this.data.price) || isNaN(this.data.qty) || this.data.price == '' || this.data.qty == '') {
@@ -518,13 +516,15 @@ $colAc: #524cff;
           width: 40%;
         }
         .btm_left {
-           margin-right: 10%;
-          .b_l_text,.btm_text {
+          margin-right: 10%;
+          .b_l_text,
+          .btm_text {
             text-align: left;
           }
         }
-        .btm_right{
-          .b_l_text,.btm_text {
+        .btm_right {
+          .b_l_text,
+          .btm_text {
             text-align: right;
           }
         }

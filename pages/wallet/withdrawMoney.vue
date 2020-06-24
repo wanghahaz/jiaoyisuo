@@ -20,7 +20,7 @@
     </view>
     <view class="tip">
       <view>温馨提示：</view>
-      <view>说明文字，对提现的限制描述</view>
+      <view>请确保您填写的信息真实有效</view>
     </view>
     <view class="sub" @click="submit">提现</view>
   </view>
