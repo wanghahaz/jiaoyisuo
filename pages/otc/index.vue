@@ -25,7 +25,7 @@
         </view>
       </swiper-item>
       <swiper-item>
-        <!-- @tap="editTab(1, 1)" -->
+        <!-- @tap="editTab(1, 1111)" -->
         <view class="optional">
           <scroll-view scroll-y="true" class="scroll_box" @scrolltolower="scroll">
             <view class="add flex" @click="toRouter('/pages/otc/issue', {})"></view>
